@@ -12,9 +12,20 @@
         <div class="col-md-1">
             <input asp-for="NewInvoice.NumberOfParts" class="form-control" min="1" max="99" />
         </div>
+        <label class="col-md-2 control-label" asp-for="NewInvoice.PickLocationId"></label>
+        <div class="col-md-3">
+            <select asp-for="NewInvoice.PickLocationId" asp-items="@(new SelectList(Model.PickLocations, "LocationId", "LocationDescription"))" class="form-control">
+                <option value="">-- Select pick location --</option>
+            </select>
+        </div>
     </div>
     <div class="form-group">
-        
+        <label class="col-md-2 control-label" asp-for="NewInvoice.AssignedEmployeeId"></label>
+        <div class="col-md-3">
+            <select asp-for="NewInvoice.AssignedEmployeeId" asp-items="@Model.Employees" class="form-control">
+                <option value="">-- Please assign an employee --</option>
+            </select> 
+        </div>
     </div>
     <input asp-for="NewInvoice.StatusId" type="hidden" value="1" />
     <input type="submit" class="btn btn-primary" value="Add" />

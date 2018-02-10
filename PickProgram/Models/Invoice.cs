@@ -14,8 +14,12 @@ namespace PickProgram.Models
         [Required]
         [DisplayName("Number of Parts")]
         public int NumberOfParts { get; set; }
-        public int? PickingLocationId { get; set; }
-        public int? AssignedEmployeeId { get; set; }
+        [Required]
+        [DisplayName("Pick Location")]
+        public int PickLocationId { get; set; }
+        [Required]
+        [DisplayName("Assigned Employee")]
+        public int AssignedEmployeeId { get; set; }
         [Required]
         public int StatusId { get; set; }
         [Required]
@@ -23,6 +27,7 @@ namespace PickProgram.Models
         public DateTime? FinishDate { get; set; }
 
         public Employee AssignedEmployee { get; set; }
+        public PickLocation PickLocation { get; set; }
         public InvoiceStatus Status { get; set; }
     }
 }

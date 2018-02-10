@@ -9,6 +9,7 @@ namespace PickProgram.Models
         public virtual DbSet<Employee> Employee { get; set; }
         public virtual DbSet<Invoice> Invoice { get; set; }
         public virtual DbSet<InvoiceStatus> InvoiceStatus { get; set; }
+        public virtual DbSet<PickLocation> PickLocation { get; set; }
 
         public InvoiceTrackerContext(DbContextOptions<InvoiceTrackerContext> options)
 : base(options)
@@ -48,7 +49,14 @@ namespace PickProgram.Models
                 entity.HasOne(d => d.AssignedEmployee)
                     .WithMany(p => p.Invoice)
                     .HasForeignKey(d => d.AssignedEmployeeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Invoice_Employee");
+
+                entity.HasOne(d => d.PickLocation)
+                    .WithMany(p => p.Invoice)
+                    .HasForeignKey(d => d.PickLocationId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Invoice_PickLocation");
 
                 entity.HasOne(d => d.Status)
                     .WithMany(p => p.Invoice)
@@ -62,6 +70,16 @@ namespace PickProgram.Models
                 entity.HasKey(e => e.StatusId);
 
                 entity.Property(e => e.Status)
+                    .IsRequired()
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<PickLocation>(entity =>
+            {
+                entity.HasKey(e => e.LocationId);
+
+                entity.Property(e => e.LocationDescription)
                     .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);

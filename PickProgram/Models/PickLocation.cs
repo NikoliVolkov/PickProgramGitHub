@@ -3,16 +3,16 @@ using System.Collections.Generic;
 
 namespace PickProgram.Models
 {
-    public partial class Employee
+    public partial class PickLocation
     {
-        public Employee()
+        public PickLocation()
         {
             Invoice = new HashSet<Invoice>();
         }
 
-        public int EmployeeId { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public int LocationId { get; set; }
+        public string LocationDescription { get; set; }
+
         public ICollection<Invoice> Invoice { get; set; }
     }
 }
