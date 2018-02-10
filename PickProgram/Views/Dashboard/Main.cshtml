@@ -1,0 +1,42 @@
+﻿@model DashboardViewModel
+<h2>Add New Pick Ticket:</h2>
+<strong><span class="text-success">@Model.SuccessMessage</span></strong>
+<form class="form-horizontal" asp-controller="Dashboard" asp-action="" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label class="col-md-2 control-label" asp-for="NewInvoice.InvoiceNumber">Invoice Number <span class="glyphicon glyphicon-qrcode"></span></label>
+        <div class="col-md-2">
+            <input asp-for="NewInvoice.InvoiceNumber" class="form-control" />
+        </div>
+        <label class="col-md-2 control-label" asp-for="NewInvoice.NumberOfParts">No. of Parts</label>
+        <div class="col-md-1">
+            <input asp-for="NewInvoice.NumberOfParts" class="form-control" min="1" max="99" />
+        </div>
+    </div>
+    <div class="form-group">
+        
+    </div>
+    <input asp-for="NewInvoice.StatusId" type="hidden" value="1" />
+    <input type="submit" class="btn btn-primary" value="Add" />
+</form>
+
+@Html.Partial("_InvoiceList", Model.ListOfInvoices)
+
+@section Scripts {
+    <script>
+        jQuery(function ($) {
+            $('.table').footable();
+        });
+        $(document).ready(function () {
+            $(".aa").TimeCircles({
+                time: {
+                    Days: { show: false },
+                    Hours: {},
+                    Minutes: {},
+                    Seconds: {}
+                }
+            });
+        });
+
+    </script>
+}

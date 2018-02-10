@@ -1,0 +1,39 @@
+﻿@model List<Invoice>
+<table class="table" data-filtering="true" data-sorting="true">
+    <thead>
+        <tr>
+            <th>Invoice #</th>
+            <th>Created On</th>
+            <th># of Parts</th>
+            <th>Pick Location</th>
+            <th>Employee</th>
+            <th>Elapsed Time</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var x in Model)
+        {
+
+            <tr>
+                <td>@x.InvoiceNumber</td>
+                <td>@x.StartDate</td>
+                <td>@x.NumberOfParts</td>
+                <td>Up</td>
+                <td>
+                    @if (x.AssignedEmployeeId != null)
+                    {
+                        <span>@x.AssignedEmployee.FirstName&nbsp;@x.AssignedEmployee.LastName</span>
+                    }
+                    else
+                    {
+                        <span style="font-weight:bold; color:red;">Unassigned</span>
+                    }
+            </td>
+            <td><div class="aa" data-date="@x.StartDate.ToString("yyyy-MM-dd hh:mm:ss")" style="width:200px;height:75px;"></div></td>
+            <td>@x.Status.Status</td>
+        </tr>
+
+    }
+    </tbody>
+</table>
