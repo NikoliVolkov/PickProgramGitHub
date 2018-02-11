@@ -26,8 +26,9 @@ namespace PickProgram.Controllers
             var dvm = new DashboardViewModel()
             {
                 Employees = PopulateEmployeeSelectList(),
-                PickLocations = _picklocationRepository.GetPickLocations().ToList(),
-                ListOfInvoices = _invoiceRepository.GetInvoices().OrderBy(p => p.StartDate).ToList()
+                PickLocations = GetPickLocations(),
+                ListOfInvoicesOnsite = GetOnsiteInvoices(),
+                ListOfInvoicesOffsite = GetOffsiteInvoices()
             };
             return View(dvm);
         }
@@ -41,19 +42,21 @@ namespace PickProgram.Controllers
             if (ModelState.IsValid)
             {
                 _invoiceRepository.AddInvoice(dvm.NewInvoice);
-                var dvmUpdated = new DashboardViewModel()
+                /*var dvmUpdated = new DashboardViewModel()
                 {
                     SuccessMessage = "Invoice created successfully.",
                     Employees = PopulateEmployeeSelectList(),
                     PickLocations = _picklocationRepository.GetPickLocations().ToList(),
                     ListOfInvoices = _invoiceRepository.GetInvoices().OrderBy(p => p.StartDate).ToList()
-                };
-                return View(dvmUpdated);
+                };*/
+                TempData["Message"] = "Invoice created successfully.";
+                return RedirectToAction("Main");
+                //return View(dvmUpdated);
             }
 
             dvm.Employees = PopulateEmployeeSelectList();
-            dvm.PickLocations = _picklocationRepository.GetPickLocations().ToList();
-            dvm.ListOfInvoices = _invoiceRepository.GetInvoices().OrderBy(p => p.StartDate).ToList();
+            dvm.PickLocations = GetPickLocations();
+            dvm.ListOfInvoicesOnsite = GetOnsiteInvoices();
             return View(dvm);
         }
 
@@ -66,11 +69,25 @@ namespace PickProgram.Controllers
                 empSelectList.Add(new SelectListItem()
                 {
                     Value = x.EmployeeId.ToString(),
-                    Text = x.LastName + ", " + x.FirstName
+                    Text = x.FirstName + " " + x.LastName
                 });
             }
 
             return empSelectList.OrderBy(x => x.Text).ToList();
+        }
+
+        public List<PickLocation> GetPickLocations()
+        {
+            return _picklocationRepository.GetPickLocations().ToList();
+        }
+
+        public List<Invoice> GetOnsiteInvoices()
+        {
+            return _invoiceRepository.GetInvoices().Where(p => p.PickLocation.LocationDescription != "Offsite").OrderBy(p => p.StartDate).ToList();
+        }
+        public List<Invoice> GetOffsiteInvoices()
+        {
+            return _invoiceRepository.GetInvoices().Where(p => p.PickLocation.LocationDescription == "Offsite").OrderBy(p => p.StartDate).ToList();
         }
     }
 }

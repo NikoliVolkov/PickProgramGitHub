@@ -1,6 +1,6 @@
 ﻿@model DashboardViewModel
 <h2>Add New Pick Ticket:</h2>
-<strong><span class="text-success">@Model.SuccessMessage</span></strong>
+<strong><span class="text-success">@TempData["Message"]</span></strong>
 <form class="form-horizontal" asp-controller="Dashboard" asp-action="" method="post">
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="form-group">
@@ -24,20 +24,24 @@
         <div class="col-md-3">
             <select asp-for="NewInvoice.AssignedEmployeeId" asp-items="@Model.Employees" class="form-control">
                 <option value="">-- Please assign an employee --</option>
-            </select> 
+            </select>
         </div>
     </div>
     <input asp-for="NewInvoice.StatusId" type="hidden" value="1" />
     <input type="submit" class="btn btn-primary" value="Add" />
 </form>
 
-@Html.Partial("_InvoiceList", Model.ListOfInvoices)
+@Html.Partial("_InvoiceList", Model.ListOfInvoicesOnsite)
+@Html.Partial("_InvoiceList", Model.ListOfInvoicesOffsite)
 
 @section Scripts {
     <script>
         jQuery(function ($) {
             $('.table').footable();
         });
+        $('.table').last().data("paging-widget-count-format", "Total Pending Offsite: {TR}");
+        $('.showHide').last().data("visible", false);
+
         $(document).ready(function () {
             $(".aa").TimeCircles({
                 time: {

@@ -21,7 +21,7 @@ namespace PickProgram.Models
 
         public IEnumerable<Invoice> GetInvoices()
         {
-            var invoiceData = _dbConnection.Invoice.Include(p => p.Status).Include(p => p.AssignedEmployee).Include(p => p.PickLocation).Where(p => p.Status.Status == "Pending");
+            var invoiceData = _dbConnection.Invoice.Include(p => p.Status).Include(p => p.AssignedEmployee).Include(p => p.PickLocation);
             return invoiceData;
         }
         

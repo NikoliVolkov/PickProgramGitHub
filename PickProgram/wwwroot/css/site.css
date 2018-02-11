@@ -42,3 +42,23 @@
         text-align: left;
     }
 }
+/* Footable css for count widget */
+.footable-paging-widget-row {
+    text-align: right;
+}
+.footable-paging-widget{
+    text-align:left;
+    font-weight:bold;
+    font-size:24px;
+}
+.footable-paging-widget-label {
+    margin-right: 10px;
+}
+.footable{
+    margin-top:20px;
+}
+@media (min-width: 768px) {
+    .footable-paging-widget {
+        float: left;
+    }
+}
