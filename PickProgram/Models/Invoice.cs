@@ -18,7 +18,6 @@ namespace PickProgram.Models
         [Required]
         [DisplayName("Pick Location")]
         public int PickLocationId { get; set; }
-        [Required]
         [DisplayName("Assigned Employee")]
         public int? AssignedEmployeeId { get; set; }
         [Required]

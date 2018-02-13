@@ -49,7 +49,6 @@ namespace PickProgram.Models
                 entity.HasOne(d => d.AssignedEmployee)
                     .WithMany(p => p.Invoice)
                     .HasForeignKey(d => d.AssignedEmployeeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Invoice_Employee");
 
                 entity.HasOne(d => d.PickLocation)
