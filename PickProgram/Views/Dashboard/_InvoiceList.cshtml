@@ -1,5 +1,5 @@
 ﻿@model List<Invoice>
-<table class="table" data-filtering="true" data-sorting="true" data-paging="true" data-paging-widget="true" data-paging-widget-count-format="Total Pending Onsite: {TR}">
+<table class="table" data-filtering="true" data-sorting="true" data-paging="true" data-editing="true" data-editing-always-show="true" data-paging-widget="true" data-paging-widget-count-format="Total Pending Onsite: {TR}">
     <thead>
         <tr>
             <th>Invoice #</th>
@@ -25,9 +25,10 @@
 
                         <td>
                         <span>@x.AssignedEmployee.FirstName&nbsp;@x.AssignedEmployee.LastName</span>
+                            <button id="@("assign" + x.InvoiceId)" onclick="getEmpDDL($(this))" type="button" class="btn btn-default btn-sm">Assign Employee <span class="glyphicon glyphicon-user" aria-hidden="true"></span></button>
                         </td>
 
-            <td><div class="aa" data-date="@x.StartDate.ToString("yyyy-MM-dd hh:mm:ss")" style="width:200px;height:75px;"></div></td>
+            <td><!--<div class="aa" data-date="@x.StartDate.ToString("yyyy-MM-dd hh:mm:ss")" style="width:200px;height:75px;"></div>--></td>
             <td>@x.Status.Status</td>
         </tr>
 

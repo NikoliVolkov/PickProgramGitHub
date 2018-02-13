@@ -53,5 +53,23 @@
             });
         });
 
+
+
+        function getEmpDDL(element) {
+            var clickedButton = element;
+            $.ajax({
+                type: "GET",
+                url: "/Dashboard/GetAjax",
+                //data: { id: clickedButton.val(), access_token: $("#access_token").val() },
+                success: function (result) {
+                    element.parent().html(result);
+                },
+                error: function (result) {
+                    element.parent().html("<span style=\"color:red;\">An error occurred. Please refresh the page.</span>");
+                }
+            });
+        }
+
+
     </script>
 }

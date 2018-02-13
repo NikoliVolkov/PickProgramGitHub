@@ -62,3 +62,9 @@
         float: left;
     }
 }
+
+.table > tbody > tr > td {
+    padding-top: 1px;
+    padding-bottom: 1px;
+    vertical-align: baseline;
+}

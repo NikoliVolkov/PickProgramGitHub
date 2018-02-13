@@ -89,5 +89,11 @@ namespace PickProgram.Controllers
         {
             return _invoiceRepository.GetInvoices().Where(p => p.PickLocation.LocationDescription == "Offsite").OrderBy(p => p.StartDate).ToList();
         }
+
+        public IActionResult GetAjax()
+        {
+            var empSelectList = PopulateEmployeeSelectList();
+            return PartialView("_EmployeeDropdown", empSelectList);
+        }
     }
 }
