@@ -35,7 +35,7 @@
 @Html.Partial("_InvoiceList", Model.ListOfInvoicesOffsite)
 
 @section Scripts {
-    <script>
+<script>
         jQuery(function ($) {
             $('.table').footable();
         });
@@ -70,6 +70,14 @@
             });
         }
 
+        function restoreAddEmployee(element) {
+            var clickedButton = element;
+            
+            var rowId = element.closest("tr").find(".invoiceid").html();
+            console.log(rowId);
+                    element.closest("td").html("<button id=\"assign" + rowId +"\" onclick=\"getEmpDDL($(this))\" type=\"button\" class=\"btn btn-default btn-sm\">Assign Employee <span class=\"glyphicon glyphicon-user\" aria-hidden=\"true\"></span></button>");
+        }
 
-    </script>
+
+</script>
 }

@@ -2,6 +2,7 @@
 <table class="table" data-filtering="true" data-sorting="true" data-paging="true" data-editing="true" data-editing-always-show="true" data-paging-widget="true" data-paging-widget-count-format="Total Pending Onsite: {TR}">
     <thead>
         <tr>
+            <th data-visible="false">Invoice Id</th>
             <th>Invoice #</th>
             <th>Created On</th>
             <th># of Parts</th>
@@ -18,6 +19,7 @@
         {
 
             <tr>
+                <td class="invoiceid">@x.InvoiceId</td>
                 <td>@x.InvoiceNumber</td>
                 <td>@x.StartDate</td>
                 <td>@x.NumberOfParts</td>
