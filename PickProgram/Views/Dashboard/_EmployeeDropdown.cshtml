@@ -2,4 +2,4 @@
 
     <select asp-items="@Model" class="form-control">
         <option value="">-- Please assign an employee --</option>
-    </select><div class="btn-group btn-group-sm"><button title="Confirm changes" type="button" class="btn btn-default"><span class="glyphicon glyphicon-ok-circle text-success" aria-hidden="true"></span></button><button onclick="restoreAddEmployee($(this))"title="Cancel" type="button" class="btn btn-default"><span class="glyphicon glyphicon-remove-circle text-danger" aria-hidden="true"></span></button></div>
+    </select><div class="btn-group btn-group-sm"><button onclick="assignEmp($(this))" title="Confirm changes" type="button" class="btn btn-default"><span class="glyphicon glyphicon-ok-circle text-success" aria-hidden="true"></span></button><button onclick="restoreAddEmployee($(this))" title="Cancel" type="button" class="btn btn-default"><span class="glyphicon glyphicon-remove-circle text-danger" aria-hidden="true"></span></button></div>

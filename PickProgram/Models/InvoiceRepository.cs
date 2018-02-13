@@ -30,5 +30,16 @@ namespace PickProgram.Models
             _dbConnection.Invoice.Add(newInvoice);
             _dbConnection.SaveChanges();
         }
+
+        public string AssignEmployee(int invoiceId, int employeeId)
+        {
+            var invoice = _dbConnection.Invoice.Find(invoiceId);
+            invoice.AssignedEmployeeId = employeeId;
+            _dbConnection.SaveChanges();
+            var emp = _dbConnection.Employee.Find(employeeId);
+            return emp.FirstName + "&nbsp;" + emp.LastName;
+
+
+        }
     }
 }

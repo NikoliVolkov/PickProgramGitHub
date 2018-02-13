@@ -53,7 +53,7 @@ options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Dashboard}/{action=Main}/{id?}");
+                    template: "{controller=Dashboard}/{action=Main}/{id?}/{id2?}");
             });
         }
     }

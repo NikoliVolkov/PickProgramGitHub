@@ -20,7 +20,7 @@ namespace PickProgram.Models
         public int PickLocationId { get; set; }
         [Required]
         [DisplayName("Assigned Employee")]
-        public int AssignedEmployeeId { get; set; }
+        public int? AssignedEmployeeId { get; set; }
         [Required]
         public int StatusId { get; set; }
         [Required]

@@ -57,15 +57,37 @@
 
         function getEmpDDL(element) {
             var clickedButton = element;
+            //var rowId = element.closest("tr").find(".invoiceid").html();
             $.ajax({
                 type: "GET",
-                url: "/Dashboard/GetAjax",
+                url: "/Dashboard/GetEmployeeDDL/",
                 //data: { id: clickedButton.val(), access_token: $("#access_token").val() },
                 success: function (result) {
                     element.parent().html(result);
                 },
                 error: function (result) {
                     element.parent().html("<span style=\"color:red;\">An error occurred. Please refresh the page.</span>");
+                }
+            });
+        }
+
+        function assignEmp(element) {
+            var clickedButton = element;
+            //console.log(clickedButton);
+            var rowId = element.closest("tr").find(".invoiceid").html();
+            //console.log(rowId)
+            var selectedEmployee = element.closest("tr").find("select").val();
+            //console.log(selectedEmployee);
+
+            $.ajax({
+                type: "POST",
+                url: "/Dashboard/AssignEmployee/" + rowId + "/" + selectedEmployee,
+                //data: { id: clickedButton.val(), access_token: $("#access_token").val() },
+                success: function (result) {
+                    element.closest("td").html("<span>" + result + "</span>");
+                },
+                error: function (result) {
+                    element.closest("td").html("<span style=\"color:red;\">An error occurred. Please refresh the page.</span>");
                 }
             });
         }
