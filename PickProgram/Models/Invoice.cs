@@ -25,6 +25,7 @@ namespace PickProgram.Models
         [Required]
         public DateTime StartDate { get; set; }
         public DateTime? FinishDate { get; set; }
+        public DateTime? AssignedDate { get; set; }
 
         public Employee AssignedEmployee { get; set; }
         public PickLocation PickLocation { get; set; }

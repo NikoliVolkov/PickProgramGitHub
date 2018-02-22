@@ -36,27 +36,52 @@
 
 @section Scripts {
 <script>
-        jQuery(function ($) {
-            $('.table').footable();
-        });
+    //initTimers();
+    jQuery(function ($) {
+        $('.table').on({
+            "init.ft.table": function (e, ft) {
+                initTimers();// bind to the plugin initialize event to do something
+            }
+        }).footable();
+        //$('.table').footable();
+    });
         $('.table').last().data("paging-widget-count-format", "Total Pending Offsite: {TR}");
         $('.showHide').last().data("visible", false);
 
-        $(document).ready(function () {
-            $(".aa").TimeCircles({
-                time: {
-                    Days: { show: false },
-                    Hours: {},
-                    Minutes: {},
-                    Seconds: {}
+        /*$(document).ready(function () {
+            $(".aa").each(function (i) {
+                $(this).countdown({
+                    since: new Date(Date.parse($(this).text())),
+                    layout: '{hnn}:{mnn}:{snn}{desc}',
+                    format: 'HMS'
+                });
+            });
+        });*/
+        function initTimers() {
+            $(".timerCell:not(.gag)").each(function (i) {
+                if ($(this).text()) {
+                    //var setDate = $(this).text().split('-')
+                    //var setDate = $(this).text();
+                    //alert(parseInt(setDate[0]) + ' ' + (parseInt(setDate[1])-1) + ' ' + parseInt(setDate[2]) + ' ' + parseInt(setDate[3]) + ' ' + parseInt(setDate[4]) + ' ' + parseInt(setDate[5]));
+                    $(this).countdown({
+                        //since: new Date(parseInt(setDate[0]), (parseInt(setDate[1]) - 1), parseInt(setDate[2]), parseInt(setDate[3]), parseInt(setDate[4]), parseInt(setDate[5])),
+                        //since: new Date(2018, 1, 19, 23, 50, 0),
+                        since: new Date(Date.parse($(this).text())),
+                        layout: '{hnn}:{mnn}:{snn}{desc}',
+                        format: 'HMS'
+                    });
                 }
             });
-        });
+        }
+        /*$(document).ready(function () {
+
+        });*/
 
 
 
         function getEmpDDL(element) {
             var clickedButton = element;
+            //element.closest("tr").find(".aa").html("glodi");
             //var rowId = element.closest("tr").find(".invoiceid").html();
             $.ajax({
                 type: "GET",
@@ -79,6 +104,7 @@
             var selectedEmployee = element.closest("tr").find("select").val();
             //console.log(selectedEmployee);
 
+
             $.ajax({
                 type: "POST",
                 url: "/Dashboard/AssignEmployee/" + rowId + "/" + selectedEmployee,
@@ -90,6 +116,8 @@
                     element.closest("td").html("<span style=\"color:red;\">An error occurred. Please refresh the page.</span>");
                 }
             });
+            $('.table').footable();
+
         }
 
         function restoreAddEmployee(element) {

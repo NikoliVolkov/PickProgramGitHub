@@ -68,3 +68,7 @@
     padding-bottom: 1px;
     vertical-align: baseline;
 }
+
+.footable-editing{
+    display:none;
+}

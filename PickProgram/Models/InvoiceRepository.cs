@@ -35,6 +35,10 @@ namespace PickProgram.Models
         {
             var invoice = _dbConnection.Invoice.Find(invoiceId);
             invoice.AssignedEmployeeId = employeeId;
+            var zone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+            var utcNow = DateTime.UtcNow;
+            var pacificNow = TimeZoneInfo.ConvertTimeFromUtc(utcNow, zone);
+            invoice.AssignedDate = pacificNow;
             _dbConnection.SaveChanges();
             var emp = _dbConnection.Employee.Find(employeeId);
             return emp.FirstName + "&nbsp;" + emp.LastName;

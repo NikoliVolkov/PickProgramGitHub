@@ -41,6 +41,10 @@ namespace PickProgram.Controllers
             dvm.NewInvoice.StartDate = pacificNow;
             if (ModelState.IsValid)
             {
+                if(dvm.NewInvoice.AssignedEmployeeId != null)
+                {
+                    dvm.NewInvoice.AssignedDate = pacificNow;
+                }
                 _invoiceRepository.AddInvoice(dvm.NewInvoice);
                 /*var dvmUpdated = new DashboardViewModel()
                 {
