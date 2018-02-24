@@ -36,15 +36,21 @@
 
 @section Scripts {
 <script>
-    //initTimers();
+    
+
+
     jQuery(function ($) {
-        $('.table').on({
-            "init.ft.table": function (e, ft) {
+         $('.table').on({
+            "ready.ft.table": function (e, ft) {
                 initTimers();// bind to the plugin initialize event to do something
-            }
+             }
         }).footable();
+        var values = { // create a hash of the editor row values
+            pickLocation: 'hello'
+        };
         //$('.table').footable();
     });
+
         $('.table').last().data("paging-widget-count-format", "Total Pending Offsite: {TR}");
         $('.showHide').last().data("visible", false);
 
@@ -80,6 +86,8 @@
 
 
         function getEmpDDL(element) {
+
+            //initTimers();
             var clickedButton = element;
             //element.closest("tr").find(".aa").html("glodi");
             //var rowId = element.closest("tr").find(".invoiceid").html();
@@ -97,11 +105,13 @@
         }
 
         function assignEmp(element) {
+
             var clickedButton = element;
             //console.log(clickedButton);
             var rowId = element.closest("tr").find(".invoiceid").html();
             //console.log(rowId)
             var selectedEmployee = element.closest("tr").find("select").val();
+            var aaa = FooTable.getRow(element);
             //console.log(selectedEmployee);
 
 
@@ -110,13 +120,14 @@
                 url: "/Dashboard/AssignEmployee/" + rowId + "/" + selectedEmployee,
                 //data: { id: clickedButton.val(), access_token: $("#access_token").val() },
                 success: function (result) {
-                    element.closest("td").html("<span>" + result + "</span>");
+                    //element.closest("td").html("<span>" + result + "</span>");
+                    aaa.val({ numOfParts: "10", assignedEmployee: result, elapsedTime: "<span class=\"timerCell\">" + "</span>" });
+                    initTimers();
                 },
                 error: function (result) {
                     element.closest("td").html("<span style=\"color:red;\">An error occurred. Please refresh the page.</span>");
                 }
             });
-            $('.table').footable();
 
         }
 
@@ -126,6 +137,11 @@
             var rowId = element.closest("tr").find(".invoiceid").html();
             console.log(rowId);
                     element.closest("td").html("<button id=\"assign" + rowId +"\" onclick=\"getEmpDDL($(this))\" type=\"button\" class=\"btn btn-default btn-sm\">Assign Employee <span class=\"glyphicon glyphicon-user\" aria-hidden=\"true\"></span></button>");
+        }
+
+
+        function mySortValue(valueOrElement) {
+            return valueOrElement;
         }
 
 

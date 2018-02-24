@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace PickProgram.Models
@@ -31,7 +32,7 @@ namespace PickProgram.Models
             _dbConnection.SaveChanges();
         }
 
-        public string AssignEmployee(int invoiceId, int employeeId)
+        public IActionResult AssignEmployee(int invoiceId, int employeeId)
         {
             var invoice = _dbConnection.Invoice.Find(invoiceId);
             invoice.AssignedEmployeeId = employeeId;
@@ -40,9 +41,9 @@ namespace PickProgram.Models
             var pacificNow = TimeZoneInfo.ConvertTimeFromUtc(utcNow, zone);
             invoice.AssignedDate = pacificNow;
             _dbConnection.SaveChanges();
-            var emp = _dbConnection.Employee.Find(employeeId);
-            return emp.FirstName + "&nbsp;" + emp.LastName;
 
+            var emp = _dbConnection.Employee.Find(employeeId);
+            return new Json( new { numOfParts = 999, assignedEmployee = emp.FirstName + emp.LastName, elapsedTime = invoice.AssignedDate } )
 
         }
     }
