@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace PickProgram.Models
 {
@@ -32,7 +33,7 @@ namespace PickProgram.Models
             _dbConnection.SaveChanges();
         }
 
-        public IActionResult AssignEmployee(int invoiceId, int employeeId)
+        public string AssignEmployee(int invoiceId, int employeeId)
         {
             var invoice = _dbConnection.Invoice.Find(invoiceId);
             invoice.AssignedEmployeeId = employeeId;
@@ -43,7 +44,7 @@ namespace PickProgram.Models
             _dbConnection.SaveChanges();
 
             var emp = _dbConnection.Employee.Find(employeeId);
-            return new Json( new { numOfParts = 999, assignedEmployee = emp.FirstName + emp.LastName, elapsedTime = invoice.AssignedDate } )
+            return JsonConvert.SerializeObject(new { numOfParts = 999, assignedEmployee = emp.FirstName + " " + emp.LastName, assignedOn = invoice.AssignedDate.Value.ToString("MM/dd/yyyy hh:mm:ss tt") });
 
         }
     }

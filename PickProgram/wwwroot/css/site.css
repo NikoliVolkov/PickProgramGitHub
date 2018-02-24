@@ -21,6 +21,10 @@
     width: 100%;
 }
 
+/*.timerCell{
+    font-weight:bold;
+}*/
+
 /* QR code generator */
 #qrCode {
     margin: 15px;

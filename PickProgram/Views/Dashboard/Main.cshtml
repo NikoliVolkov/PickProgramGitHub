@@ -43,7 +43,16 @@
          $('.table').on({
             "ready.ft.table": function (e, ft) {
                 initTimers();// bind to the plugin initialize event to do something
-             }
+             },
+            "after.ft.filtering": function (e, ft) {
+                initTimers();// bind to the plugin initialize event to do something
+            },
+            "after.ft.sorting": function (e, ft) {
+                initTimers();// bind to the plugin initialize event to do something
+            },
+            "after.ft.paging": function (e, ft) {
+                initTimers();// bind to the plugin initialize event to do something
+            }
         }).footable();
         var values = { // create a hash of the editor row values
             pickLocation: 'hello'
@@ -64,7 +73,7 @@
             });
         });*/
         function initTimers() {
-            $(".timerCell:not(.gag)").each(function (i) {
+            $(".timerCell:not(.is-countdown)").each(function (i) {
                 if ($(this).text()) {
                     //var setDate = $(this).text().split('-')
                     //var setDate = $(this).text();
@@ -111,7 +120,7 @@
             var rowId = element.closest("tr").find(".invoiceid").html();
             //console.log(rowId)
             var selectedEmployee = element.closest("tr").find("select").val();
-            var aaa = FooTable.getRow(element);
+            var currentRow = FooTable.getRow(element);
             //console.log(selectedEmployee);
 
 
@@ -121,7 +130,9 @@
                 //data: { id: clickedButton.val(), access_token: $("#access_token").val() },
                 success: function (result) {
                     //element.closest("td").html("<span>" + result + "</span>");
-                    aaa.val({ numOfParts: "10", assignedEmployee: result, elapsedTime: "<span class=\"timerCell\">" + "</span>" });
+                    var parsedResult = JSON.parse(result);
+                    currentRow.val({ numOfParts: parsedResult.numOfParts, assignedEmployee: parsedResult.assignedEmployee, assignedOn: parsedResult.assignedOn, elapsedTime: "<span class=\"timerCell\">" + parsedResult.assignedOn + "</span>" });
+                    //currentRow.val({ numOfParts: result.numOfParts, assignedEmployee: result.assignedEmployee, elapsedTime: "<span class=\"timerCell\">" + result.elapsedTime + "</span>" });
                     initTimers();
                 },
                 error: function (result) {
