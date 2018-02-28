@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace PickProgram.Models
 {
@@ -20,6 +21,14 @@ namespace PickProgram.Models
         public IEnumerable<Employee> GetEmployees()
         {
             return _dbConnection.Employee;
+        }
+
+        public IEnumerable<Employee> GetEmployeesUnassigned()
+        {
+            //var invoicesWithAssigned = new HashSet<int?>(_dbConnection.Invoice.Include(p => p.AssignedEmployee).Select(p => p.AssignedEmployeeId));
+            //var result = _dbConnection.Employee.Where(x => !invoicesWithAssigned.Contains(x.EmployeeId));
+            var result = _dbConnection.Employee.Where(x => x.Invoice.Count == 0);
+            return result;
         }
     }
 }

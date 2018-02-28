@@ -8,6 +8,7 @@ namespace PickProgram.Models
     public interface IEmployeeRepository
     {
         IEnumerable<Employee> GetEmployees();
+        IEnumerable<Employee> GetEmployeesUnassigned();
         Employee GetEmployeeById(int employeeId);
     }
 }

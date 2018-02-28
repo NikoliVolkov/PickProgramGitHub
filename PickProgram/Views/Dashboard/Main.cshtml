@@ -33,7 +33,7 @@
 
 @Html.Partial("_InvoiceList", Model.ListOfInvoicesOnsite)
 @Html.Partial("_InvoiceList", Model.ListOfInvoicesOffsite)
-
+<div id="currentDDL" style="display:none;"></div>
 @section Scripts {
 <script>
     
@@ -43,15 +43,19 @@
          $('.table').on({
             "ready.ft.table": function (e, ft) {
                 initTimers();// bind to the plugin initialize event to do something
+                //getEmpDDLUnassigned();
              },
             "after.ft.filtering": function (e, ft) {
-                initTimers();// bind to the plugin initialize event to do something
+                initTimers();
+                getEmpDDLUnassigned();// bind to the plugin initialize event to do something
             },
             "after.ft.sorting": function (e, ft) {
-                initTimers();// bind to the plugin initialize event to do something
+                initTimers();
+                getEmpDDLUnassigned();// bind to the plugin initialize event to do something
             },
             "after.ft.paging": function (e, ft) {
-                initTimers();// bind to the plugin initialize event to do something
+                initTimers();
+                getEmpDDLUnassigned();// bind to the plugin initialize event to do something
             }
         }).footable();
         var values = { // create a hash of the editor row values
@@ -88,11 +92,39 @@
                 }
             });
         }
-        /*$(document).ready(function () {
 
-        });*/
+        function getEmpDDLUnassigned() {
+            //alert('another');
+            $.ajax({
+                type: "GET",
+                url: "/Dashboard/GetEmployeeDDLUnassigned/",
+                //data: { id: clickedButton.val(), access_token: $("#access_token").val() },
+                success: function (result) {
+                    $("#currentDDL").html(result)
+                },
+                error: function (result) {
+                    $("#currentDDL").html("<span style=\"color:red;\">An error occurred. Please refresh the page.</span>");
+                }
+            }).done(function () {
 
+                //alert($("#currentDDL").children('select').children('option').length);
+                if ($("#currentDDL").children('select').children('option').length > 1) {
+                    $(".empDDL").each(function (i) {
+                        $(this).html($("#currentDDL").html());
+                    });
+                }
+                else {
+                    $(".empDDL").each(function (i) {
+                        $(this).html("No available employees!");
+                    });
 
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            getEmpDDLUnassigned();
+        });
 
         function getEmpDDL(element) {
 
@@ -134,6 +166,7 @@
                     currentRow.val({ numOfParts: parsedResult.numOfParts, assignedEmployee: parsedResult.assignedEmployee, assignedOn: parsedResult.assignedOn, elapsedTime: "<span class=\"timerCell\">" + parsedResult.assignedOn + "</span>" });
                     //currentRow.val({ numOfParts: result.numOfParts, assignedEmployee: result.assignedEmployee, elapsedTime: "<span class=\"timerCell\">" + result.elapsedTime + "</span>" });
                     initTimers();
+                    getEmpDDLUnassigned();
                 },
                 error: function (result) {
                     element.closest("td").html("<span style=\"color:red;\">An error occurred. Please refresh the page.</span>");
@@ -142,18 +175,18 @@
 
         }
 
-        function restoreAddEmployee(element) {
+        /*function restoreAddEmployee(element) {
             var clickedButton = element;
             
             var rowId = element.closest("tr").find(".invoiceid").html();
             console.log(rowId);
                     element.closest("td").html("<button id=\"assign" + rowId +"\" onclick=\"getEmpDDL($(this))\" type=\"button\" class=\"btn btn-default btn-sm\">Assign Employee <span class=\"glyphicon glyphicon-user\" aria-hidden=\"true\"></span></button>");
-        }
+        }*/
 
 
-        function mySortValue(valueOrElement) {
+        /*function mySortValue(valueOrElement) {
             return valueOrElement;
-        }
+        }*/
 
 
 </script>

@@ -80,6 +80,22 @@ namespace PickProgram.Controllers
             return empSelectList.OrderBy(x => x.Text).ToList();
         }
 
+        public List<SelectListItem> PopulateEmployeeSelectListOnsite()
+        {
+            var empSelectList = new List<SelectListItem>();
+            var empList = _employeeRepository.GetEmployeesUnassigned().Where(e => e.FirstName != "Offsite").ToList();
+            foreach (var x in empList)
+            {
+                empSelectList.Add(new SelectListItem()
+                {
+                    Value = x.EmployeeId.ToString(),
+                    Text = x.FirstName + " " + x.LastName
+                });
+            }
+
+            return empSelectList.OrderBy(x => x.Text).ToList();
+        }
+
         public List<PickLocation> GetPickLocations()
         {
             return _picklocationRepository.GetPickLocations().ToList();
@@ -98,6 +114,11 @@ namespace PickProgram.Controllers
         public IActionResult GetEmployeeDDL()
         {
             var empSelectList = PopulateEmployeeSelectList();
+            return PartialView("_EmployeeDropdown", empSelectList);
+        }
+        public IActionResult GetEmployeeDDLUnassigned()
+        {
+            var empSelectList = PopulateEmployeeSelectListOnsite();
             return PartialView("_EmployeeDropdown", empSelectList);
         }
         public string AssignEmployee(int id, int id2)
