@@ -47,5 +47,12 @@ namespace PickProgram.Models
             return JsonConvert.SerializeObject(new { numOfParts = 999, assignedEmployee = emp.FirstName + " " + emp.LastName, assignedOn = invoice.AssignedDate.Value.ToString("MM/dd/yyyy hh:mm:ss tt") });
 
         }
+
+        public void CancelInvoice(int invoiceId)
+        {
+            _dbConnection.Invoice.Remove(_dbConnection.Invoice.Find(invoiceId));
+            _dbConnection.SaveChanges();            
+            
+        }
     }
 }

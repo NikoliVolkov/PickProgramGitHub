@@ -73,6 +73,18 @@
     vertical-align: baseline;
 }
 
-.footable-editing{
-    display:none;
+.footable-editing {
+    display: none;
+}
+
+.input-group-sm > .form-control, .input-group-sm > .input-group-addon, .input-group-sm > .input-group-btn > .btn {
+    font-size: 14px;
+}
+
+.input-group > .form-control {
+    float: none;
+}
+
+#pickedPartsText, #employeeName {
+    font-weight: bold;
 }

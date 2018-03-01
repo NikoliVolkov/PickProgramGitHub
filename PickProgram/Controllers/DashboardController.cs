@@ -125,5 +125,10 @@ namespace PickProgram.Controllers
         {
             return _invoiceRepository.AssignEmployee(id, id2);
         }
+        [HttpPost]
+        public void CancelInvoice(int id)
+        {
+            _invoiceRepository.CancelInvoice(id);
+        }
     }
 }

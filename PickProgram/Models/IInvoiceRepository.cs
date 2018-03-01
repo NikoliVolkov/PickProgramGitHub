@@ -12,5 +12,6 @@ namespace PickProgram.Models
         Invoice GetInvoiceById(int invoiceId);
         void AddInvoice(Invoice newInvoice);
         string AssignEmployee(int invoiceId, int employeeId);
+        void CancelInvoice(int invoiceId);
     }
 }
