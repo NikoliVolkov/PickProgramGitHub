@@ -153,9 +153,6 @@
         function initTimers() {
             $(".timerCell:not(.is-countdown)").each(function (i) {
                 if ($(this).text()) {
-                    //var setDate = $(this).text().split('-')
-                    //var setDate = $(this).text();
-                    //alert(parseInt(setDate[0]) + ' ' + (parseInt(setDate[1])-1) + ' ' + parseInt(setDate[2]) + ' ' + parseInt(setDate[3]) + ' ' + parseInt(setDate[4]) + ' ' + parseInt(setDate[5]));
                     $(this).countdown({
                         //since: new Date(parseInt(setDate[0]), (parseInt(setDate[1]) - 1), parseInt(setDate[2]), parseInt(setDate[3]), parseInt(setDate[4]), parseInt(setDate[5])),
                         //since: new Date(2018, 1, 19, 23, 50, 0),
@@ -248,8 +245,11 @@
                     //element.closest("td").html("<span>" + result + "</span>");
                     var parsedResult = JSON.parse(result);
                     enableCloseButtonForRow(clickedButton);
-                    currentRow.val({ numOfParts: parsedResult.numOfParts, assignedEmployee: parsedResult.assignedEmployee, assignedOn: parsedResult.assignedOn, elapsedTime: "<span class=\"timerCell\">" + parsedResult.assignedOn + "</span>", fart: 6});
+                    currentRow.val({ numOfParts: parsedResult.numOfParts, assignedEmployee: parsedResult.assignedEmployee, assignedOn: parsedResult.assignedOn, elapsedTime: parsedResult.assignedOn });
                     //currentRow.val({ numOfParts: result.numOfParts, assignedEmployee: result.assignedEmployee, elapsedTime: "<span class=\"timerCell\">" + result.elapsedTime + "</span>" });
+                    var rowTimerCell = element.closest("tr").find(".setTimer");
+                    alert(rowTimerCell); alert(rowTimerCell.html());
+                    //rowTimerCell.removeClass("setTimer").addClass("timerCell");
                     initTimers();
                     getEmpDDLUnassigned();
                 },

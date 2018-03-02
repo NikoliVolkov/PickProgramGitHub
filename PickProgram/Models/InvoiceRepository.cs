@@ -43,8 +43,23 @@ namespace PickProgram.Models
             invoice.AssignedDate = pacificNow;
             _dbConnection.SaveChanges();
 
+            DateTime dotNetTicks = new DateTime(invoice.AssignedDate.Value.Year, invoice.AssignedDate.Value.Month, invoice.AssignedDate.Value.Day, invoice.AssignedDate.Value.Hour, invoice.AssignedDate.Value.Minute, invoice.AssignedDate.Value.Second);
+
+            //check if currently in daylight savings to modify display
+            DateTime currentDate = DateTime.Now; 
+            TimeZoneInfo tzi = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+            bool isCurrentlyDaylightSavings = tzi.IsDaylightSavingTime(currentDate);
+
+            double jsTimestamp = (dotNetTicks.AddHours(8).Subtract(new DateTime(1970, 1, 1))).TotalMilliseconds;
+            if (isCurrentlyDaylightSavings)
+            {
+                jsTimestamp = (dotNetTicks.AddHours(7).Subtract(new DateTime(1970, 1, 1))).TotalMilliseconds;
+            }
+          
+
+
             var emp = _dbConnection.Employee.Find(employeeId);
-            return JsonConvert.SerializeObject(new { numOfParts = 999, assignedEmployee = emp.FirstName + " " + emp.LastName, assignedOn = invoice.AssignedDate.Value.Ticks });
+            return JsonConvert.SerializeObject(new { numOfParts = 999, assignedEmployee = emp.FirstName + " " + emp.LastName, assignedOn = jsTimestamp });
 
         }
 

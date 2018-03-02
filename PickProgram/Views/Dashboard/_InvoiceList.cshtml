@@ -19,7 +19,11 @@
 
             @{
                 DateTime dotNetTicks;
-                double unixTimestamp;
+                double jsTimestamp;
+                //check if currently in daylight savings to modify display
+                DateTime currentDate = DateTime.Now;
+                TimeZoneInfo tzi = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+                bool isCurrentlyDaylightSavings = tzi.IsDaylightSavingTime(currentDate);
             }
 
         @foreach (var x in Model)
@@ -37,12 +41,17 @@
                   <td>@x.AssignedDate</td>
                   @if(x.AssignedDate.HasValue){
                       dotNetTicks = new DateTime(x.AssignedDate.Value.Year, x.AssignedDate.Value.Month, x.AssignedDate.Value.Day, x.AssignedDate.Value.Hour, x.AssignedDate.Value.Minute, x.AssignedDate.Value.Second);
-                      unixTimestamp = (dotNetTicks.Subtract(new DateTime(1970, 1, 1))).TotalMilliseconds;
+
+                      jsTimestamp = (dotNetTicks.AddHours(8).Subtract(new DateTime(1970, 1, 1))).TotalMilliseconds;
+                      if (isCurrentlyDaylightSavings)
+                      {
+                          jsTimestamp = (dotNetTicks.AddHours(7).Subtract(new DateTime(1970, 1, 1))).TotalMilliseconds;
+                      }
                       //unixTimestamp = unixTimestamp * 1000;
-                      <td class="timerCell">@unixTimestamp</td>
+                      <td class="timerCell">@jsTimestamp</td>
                   }
                   else {
-                      <td></td>
+                      <td class="setTimer"></td>
                   }
                   <td>@x.Status.Status</td>
 
