@@ -185,15 +185,24 @@
                 if ($("#currentDDL").children('select').children('option').length > 1) {
                     $(".empDDL").each(function (i) {
                         $(this).html($("#currentDDL").html());
+                        disableCloseButtonForRow($(this));
                     });
                 }
                 else {
                     $(".empDDL").each(function (i) {
                         $(this).html("No available employees!");
+                        disableCloseButtonForRow($(this));
                     });
 
                 }
             });
+        }
+
+        function disableCloseButtonForRow(dropdownInRow) {
+            dropdownInRow.closest("tr").find(".btn.btn-default.footable-edit").addClass("disabled");
+        }
+        function enableCloseButtonForRow(clickedButtonInRow) {
+            clickedButtonInRow.closest("tr").find(".btn.btn-default.footable-edit.disabled").removeClass("disabled");
         }
 
         $(document).ready(function () {
@@ -201,7 +210,7 @@
             getEmpDDLUnassigned();
         });
 
-        function getEmpDDL(element) {
+        /*function getEmpDDL(element) {
 
             //initTimers();
             var clickedButton = element;
@@ -218,7 +227,7 @@
                     element.parent().html("<span style=\"color:red;\">An error occurred. Please refresh the page.</span>");
                 }
             });
-        }
+        }*/
 
         function assignEmp(element) {
 
@@ -238,6 +247,7 @@
                 success: function (result) {
                     //element.closest("td").html("<span>" + result + "</span>");
                     var parsedResult = JSON.parse(result);
+                    enableCloseButtonForRow(clickedButton);
                     currentRow.val({ numOfParts: parsedResult.numOfParts, assignedEmployee: parsedResult.assignedEmployee, assignedOn: parsedResult.assignedOn, elapsedTime: "<span class=\"timerCell\">" + parsedResult.assignedOn + "</span>" });
                     //currentRow.val({ numOfParts: result.numOfParts, assignedEmployee: result.assignedEmployee, elapsedTime: "<span class=\"timerCell\">" + result.elapsedTime + "</span>" });
                     initTimers();
@@ -273,13 +283,17 @@
             }
             
         });
-        /*function restoreAddEmployee(element) {
-            var clickedButton = element;
-            
-            var rowId = element.closest("tr").find(".invoiceid").html();
-            console.log(rowId);
-                    element.closest("td").html("<button id=\"assign" + rowId +"\" onclick=\"getEmpDDL($(this))\" type=\"button\" class=\"btn btn-default btn-sm\">Assign Employee <span class=\"glyphicon glyphicon-user\" aria-hidden=\"true\"></span></button>");
-        }*/
+
+        function mySortValue(valueOrElement) {
+            debugger;
+            if (FooTable.is.element(valueOrElement) || FooTable.is.jq(valueOrElement)) { var sortVal = this.parser(valueOrElement); alert(sortVal); return jQuery(valueOrElement).data('sortValue') || sortVal; }
+            if (FooTable.is.hash(valueOrElement) && FooTable.is.hash(valueOrElement.options)) {
+                if (FooTable.is.string(valueOrElement.options.sortValue)) return valueOrElement.options.sortValue;
+                if (FooTable.is.defined(valueOrElement.value)) valueOrElement = valueOrElement.value;
+            }
+            if (FooTable.is.defined(valueOrElement) && valueOrElement != null) return valueOrElement;
+            return null;
+        }
 
 
         /*function mySortValue(valueOrElement) {
