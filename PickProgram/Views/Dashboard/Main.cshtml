@@ -245,11 +245,11 @@
                     //element.closest("td").html("<span>" + result + "</span>");
                     var parsedResult = JSON.parse(result);
                     enableCloseButtonForRow(clickedButton);
-                    currentRow.val({ numOfParts: parsedResult.numOfParts, assignedEmployee: parsedResult.assignedEmployee, assignedOn: parsedResult.assignedOn, elapsedTime: parsedResult.assignedOn });
-                    //currentRow.val({ numOfParts: result.numOfParts, assignedEmployee: result.assignedEmployee, elapsedTime: "<span class=\"timerCell\">" + result.elapsedTime + "</span>" });
-                    var rowTimerCell = element.closest("tr").find(".setTimer");
-                    alert(rowTimerCell); alert(rowTimerCell.html());
-                    //rowTimerCell.removeClass("setTimer").addClass("timerCell");
+                    var rowTimerCell = clickedButton.closest("tr").find(".setTimer");
+                    currentRow.val({ assignedEmployee: parsedResult.assignedEmployee, elapsedTime: parsedResult.assignedOn });
+                    //currentRow.val({ assignedEmployee: parsedResult.assignedEmployee, assignedOn: parsedResult.assignedOn, elapsedTime: parsedResult.assignedOn });
+ 
+                    rowTimerCell.removeClass("setTimer").addClass("timerCell");
                     initTimers();
                     getEmpDDLUnassigned();
                 },
@@ -284,15 +284,15 @@
             
         });
 
-    function mySortValue(valueOrElement) {
-        if (FooTable.is.element(valueOrElement) || FooTable.is.jq(valueOrElement)) { var sortVal = this.parser(valueOrElement); alert(sortVal); if (sortVal == null) { sortVal = 9999999999999; } return jQuery(valueOrElement).data('sortValue') || sortVal; }
-        if (FooTable.is.hash(valueOrElement) && FooTable.is.hash(valueOrElement.options)) {
-            if (FooTable.is.string(valueOrElement.options.sortValue)) return valueOrElement.options.sortValue;
-            if (FooTable.is.defined(valueOrElement.value)) valueOrElement = valueOrElement.value;
+        function mySortValue(valueOrElement) {
+            if (FooTable.is.element(valueOrElement) || FooTable.is.jq(valueOrElement)) { var sortVal = this.parser(valueOrElement); if (sortVal == null) { sortVal = 9999999999999; } return jQuery(valueOrElement).data('sortValue') || sortVal; }
+            if (FooTable.is.hash(valueOrElement) && FooTable.is.hash(valueOrElement.options)) {
+                if (FooTable.is.string(valueOrElement.options.sortValue)) return valueOrElement.options.sortValue;
+                if (FooTable.is.defined(valueOrElement.value)) valueOrElement = valueOrElement.value;
+            }
+            if (FooTable.is.defined(valueOrElement) && valueOrElement != null) return valueOrElement;
+            return null;
         }
-        if (FooTable.is.defined(valueOrElement) && valueOrElement != null) return valueOrElement;
-        return null;
-    }
 
 
 </script>

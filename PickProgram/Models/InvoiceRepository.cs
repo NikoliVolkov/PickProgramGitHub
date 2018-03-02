@@ -59,7 +59,7 @@ namespace PickProgram.Models
 
 
             var emp = _dbConnection.Employee.Find(employeeId);
-            return JsonConvert.SerializeObject(new { numOfParts = 999, assignedEmployee = emp.FirstName + " " + emp.LastName, assignedOn = jsTimestamp });
+            return JsonConvert.SerializeObject(new { assignedEmployee = emp.FirstName + " " + emp.LastName, assignedOn = jsTimestamp });
 
         }
 
