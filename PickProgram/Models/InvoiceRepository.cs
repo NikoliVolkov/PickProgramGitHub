@@ -44,7 +44,7 @@ namespace PickProgram.Models
             _dbConnection.SaveChanges();
 
             var emp = _dbConnection.Employee.Find(employeeId);
-            return JsonConvert.SerializeObject(new { numOfParts = 999, assignedEmployee = emp.FirstName + " " + emp.LastName, assignedOn = invoice.AssignedDate.Value.ToString("MM/dd/yyyy hh:mm:ss tt") });
+            return JsonConvert.SerializeObject(new { numOfParts = 999, assignedEmployee = emp.FirstName + " " + emp.LastName, assignedOn = invoice.AssignedDate.Value.Ticks });
 
         }
 

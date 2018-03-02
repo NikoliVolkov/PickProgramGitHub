@@ -10,14 +10,20 @@
             <th class="showHide" data-visible="true" data-name="assignedEmployee">Employee</th>
             <th>Created On</th>
             <th data-type="date" data-name="assignedOn">Assigned On</th>
-            <th data-sort-value="mySortValue" data-name="elapsedTime" data-sorted="true" data-direction="ASC">Elapsed Time</th>
+            <th data-sort-value="mySortValue" data-type="number" data-name="elapsedTime" data-sorted="true" data-direction="ASC">Elapsed Time</th>
             <th data-visible="false">Status</th>
+
         </tr>
     </thead>
     <tbody>
+
+            @{
+                DateTime dotNetTicks;
+                double unixTimestamp;
+            }
+
         @foreach (var x in Model)
         {
-
             <tr>
                 <td class="invoiceid">@x.InvoiceId</td>
                 <td>@x.InvoiceNumber</td>
@@ -29,8 +35,17 @@
                   <td>@if (x.AssignedEmployeeId == null){<span class="empDDL input-group input-group-sm">Please enable JavaScript.</span>}else{<text>@x.AssignedEmployee.FirstName @x.AssignedEmployee.LastName</text>}</td>
                   <td>@x.StartDate</td>
                   <td>@x.AssignedDate</td>
-                  <td>@if(x.AssignedDate.HasValue){ <span class="timerCell">@x.AssignedDate</span> }</td>
+                  @if(x.AssignedDate.HasValue){
+                      dotNetTicks = new DateTime(x.AssignedDate.Value.Year, x.AssignedDate.Value.Month, x.AssignedDate.Value.Day, x.AssignedDate.Value.Hour, x.AssignedDate.Value.Minute, x.AssignedDate.Value.Second);
+                      unixTimestamp = (dotNetTicks.Subtract(new DateTime(1970, 1, 1))).TotalMilliseconds;
+                      //unixTimestamp = unixTimestamp * 1000;
+                      <td class="timerCell">@unixTimestamp</td>
+                  }
+                  else {
+                      <td></td>
+                  }
                   <td>@x.Status.Status</td>
+
         </tr>
 
     }
