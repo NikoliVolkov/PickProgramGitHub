@@ -38,65 +38,11 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-md-7">
+        <div id="offsiteTable" class="col-md-7">
             @Html.Partial("_InvoiceList", Model.ListOfInvoicesOffsite)
         </div>
         <div class="col-md-5">
-            <h3 class="stats"><span class="glyphicon glyphicon-tasks" style="font-size:20px"></span> Today's Stats</h3>
-            <div><strong>Total Invoices:</strong> 36</div>
-            <div><strong>Total Parts Pulled</strong>: 167</div>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Employee</th>
-                        <th>Total Invoices</th>
-                        <th># of Parts Pulled</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Jaun Pablo</td>
-                        <td>7</td>
-                        <td>32</td>
-                    </tr>
-                    <tr>
-                        <td>Jaun Pablo</td>
-                        <td>7</td>
-                        <td>32</td>
-                    </tr>
-                    <tr>
-                        <td>Jaun Pablo</td>
-                        <td>7</td>
-                        <td>32</td>
-                    </tr>
-                    <tr>
-                        <td>Jaun Pablo</td>
-                        <td>7</td>
-                        <td>32</td>
-                    </tr>
-                    <tr>
-                        <td>Jaun Pablo</td>
-                        <td>7</td>
-                        <td>32</td>
-                    </tr>
-                    <tr>
-                        <td>Jaun Pablo</td>
-                        <td>7</td>
-                        <td>32</td>
-                    </tr>
-                    <tr>
-                        <td>Jaun Pablo</td>
-                        <td>7</td>
-                        <td>32</td>
-                    </tr>
-                    <tr>
-                        <td>Jaun Pablo</td>
-                        <td>7</td>
-                        <td>32</td>
-                    </tr>
-
-                </tbody>
-            </table>
+            @Html.Partial("_StatsSection")
         </div>
     </div>
 </div>
@@ -143,7 +89,6 @@
             var $modal = $('#editor-modal'),
                 $editor = $('#editor'),
                 $editorTitle = $('#editor-title');
-
 
             jQuery(function ($) {
                 $('.table').on({
@@ -192,6 +137,7 @@
                                     //data: { id: clickedButton.val(), access_token: $("#access_token").val() },
                                     success: function (result) {
                                         row.delete();
+                                        initTimers();
                                         getEmpDDLUnassigned();
                                     },
                                     error: function (result) {
@@ -207,9 +153,9 @@
                 //$('.table').footable();
             });
 
-            $('.table').last().data("paging-widget-count-format", "Total Pending Offsite: {TR}");
-            $('.hideLocation').last().data("visible", false);
-            $('.hideAssigned').last().data("visible", false);
+            $("#offsiteTable .table").data("paging-widget-count-format", "Total Pending Offsite: {TR}");
+            $(".hideLocation").last().data("visible", false);
+            $(".hideAssigned").last().data("visible", false);
 
             /*$(document).ready(function () {
                 $(".aa").each(function (i) {
@@ -220,7 +166,7 @@
                     });
                 });
             });*/
-            function initTimers() {
+            function initTimers() {  
                 $(".timerCell:not(.is-countdown)").each(function (i) {
                     if ($(this).text()) {
                         $(this).countdown({
@@ -247,7 +193,7 @@
                         $("#currentDDL").html("<span style=\"color:red;\">An error occurred. Please refresh the page.</span>");
                     }
                 }).done(function () {
-
+                    //fill each DDL with html from updated currentDDL
                     //alert($("#currentDDL").children('select').children('option').length);
                     if ($("#currentDDL").children('select').children('option').length > 1) {
                         $(".empDDL").each(function (i) {
@@ -316,7 +262,7 @@
                         var parsedResult = JSON.parse(result);
                         enableCloseButtonForRow(clickedButton);
                         var rowTimerCell = clickedButton.closest("tr").find(".setTimer");
-                        currentRow.val({ assignedEmployee: parsedResult.assignedEmployee, elapsedTime: parsedResult.assignedOn });
+                        currentRow.val({ assignedEmployee: parsedResult.assignedEmployee, assignedOn: parsedResult.assignedOn, elapsedTime: parsedResult.assignedOn });
                         //currentRow.val({ assignedEmployee: parsedResult.assignedEmployee, assignedOn: parsedResult.assignedOn, elapsedTime: parsedResult.assignedOn });
 
                         rowTimerCell.removeClass("setTimer").addClass("timerCell");
@@ -347,7 +293,10 @@
                     // here you can execute an ajax call to the server and then only update the row once the result is
                     // retrieved. This example simply updates the row straight away.
                     row.delete();
+
                     $modal.modal('hide');
+                    initTimers();
+                    getEmpDDLUnassigned();
                 } else {
                     $modal.html("<span style=\"color:red;\">An error occurred, please refresh the page and try again.</span>");
                 }
