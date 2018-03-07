@@ -8,262 +8,332 @@
         <div class="col-md-2">
             <input asp-for="NewInvoice.InvoiceNumber" class="form-control" />
         </div>
-        <label class="col-md-2 control-label" asp-for="NewInvoice.NumberOfParts">No. of Parts</label>
-        <div class="col-md-1">
-            <input asp-for="NewInvoice.NumberOfParts" class="form-control" min="1" max="99" />
+        <!--<label class="col-md-2 control-label" asp-for="NewInvoice.NumberOfParts">No. of Parts</label>-->
+        <div class="col-md-2">
+            <input asp-for="NewInvoice.NumberOfParts" class="form-control" min="1" max="99" placeholder="No. of Parts"/>
         </div>
-        <label class="col-md-2 control-label" asp-for="NewInvoice.PickLocationId"></label>
+        <!--<label class="col-md-2 control-label" asp-for="NewInvoice.PickLocationId"></label>-->
         <div class="col-md-3">
             <select asp-for="NewInvoice.PickLocationId" asp-items="@(new SelectList(Model.PickLocations, "LocationId", "LocationDescription"))" class="form-control">
-                <option value="">-- Select pick location --</option>
+                <option value="">-- Pick location --</option>
             </select>
         </div>
-    </div>
-    <div class="form-group">
-        <label class="col-md-2 control-label" asp-for="NewInvoice.AssignedEmployeeId"></label>
+        <!--<label class="col-md-2 control-label" asp-for="NewInvoice.AssignedEmployeeId"></label>-->
         <div class="col-md-3">
             <select asp-for="NewInvoice.AssignedEmployeeId" asp-items="@Model.Employees" class="form-control">
                 <option value="">-- Assign Employee --</option>
             </select>
         </div>
     </div>
+    <!--<div class="form-group">
+
+    </div>-->
     <input asp-for="NewInvoice.StatusId" type="hidden" value="1" />
     <input type="submit" class="btn btn-primary" value="Add" />
 </form>
 
-@Html.Partial("_InvoiceList", Model.ListOfInvoicesOnsite)
-@Html.Partial("_InvoiceList", Model.ListOfInvoicesOffsite)
-<div id="currentDDL" style="display:none;"></div>
+<div class="container-fluid">
+    @Html.Partial("_InvoiceList", Model.ListOfInvoicesOnsite)
+</div>
 
-<div class="modal fade" id="editor-modal" tabindex="-1" role="dialog" aria-labelledby="editor-title">
-    <style scoped>
-        /* provides a red astrix to denote required fields - this should be included in common stylesheet */
-        .form-group.required .control-label:after {
-            content: "*";
-            color: red;
-            margin-left: 4px;
-        }
-    </style>
-    <div class="modal-dialog" role="document">
-        <form class="modal-content form-horizontal" id="editor">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                <h4 class="modal-title" id="editor-title"></h4>
-            </div>
-            <div class="modal-body">
-                <p>Did <span id="employeeName"></span> pick all <span id="pickedPartsText"></span> parts on the invoice?</p>
-                <p>If not, please indicate number of parts picked below before closing the invoice. Otherwise leave as is:</p>
-                <input type="number" id="id" name="id" class="hidden" />
-                <div class="form-group required">
-                    <label for="firstName" class="col-sm-3 control-label"># of Parts</label>
-                    <div class="col-md-2">
-                        <input type="number" class="form-control" id="pickedParts" name="pickedParts" min="1" max="99" required>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Save and Close Invoice</button>
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            </div>
-        </form>
+<div class="container">
+    <div class="row">
+        <div class="col-md-7">
+            @Html.Partial("_InvoiceList", Model.ListOfInvoicesOffsite)
+        </div>
+        <div class="col-md-5">
+            <h3 class="stats"><span class="glyphicon glyphicon-tasks" style="font-size:20px"></span> Today's Stats</h3>
+            <div><strong>Total Invoices:</strong> 36</div>
+            <div><strong>Total Parts Pulled</strong>: 167</div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Employee</th>
+                        <th>Total Invoices</th>
+                        <th># of Parts Pulled</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Jaun Pablo</td>
+                        <td>7</td>
+                        <td>32</td>
+                    </tr>
+                    <tr>
+                        <td>Jaun Pablo</td>
+                        <td>7</td>
+                        <td>32</td>
+                    </tr>
+                    <tr>
+                        <td>Jaun Pablo</td>
+                        <td>7</td>
+                        <td>32</td>
+                    </tr>
+                    <tr>
+                        <td>Jaun Pablo</td>
+                        <td>7</td>
+                        <td>32</td>
+                    </tr>
+                    <tr>
+                        <td>Jaun Pablo</td>
+                        <td>7</td>
+                        <td>32</td>
+                    </tr>
+                    <tr>
+                        <td>Jaun Pablo</td>
+                        <td>7</td>
+                        <td>32</td>
+                    </tr>
+                    <tr>
+                        <td>Jaun Pablo</td>
+                        <td>7</td>
+                        <td>32</td>
+                    </tr>
+                    <tr>
+                        <td>Jaun Pablo</td>
+                        <td>7</td>
+                        <td>32</td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
-@section Scripts {
-<script>
-
-    var $modal = $('#editor-modal'),
-        $editor = $('#editor'),
-        $editorTitle = $('#editor-title');
 
 
-    jQuery(function ($) {
-         $('.table').on({
-            "ready.ft.table": function (e, ft) {
-                //initTimers();// bind to the plugin initialize event to do something
-                //getEmpDDLUnassigned();
-             },
-            "after.ft.filtering": function (e, ft) {
-                initTimers();
-                getEmpDDLUnassigned();// bind to the plugin initialize event to do something
-            },
-            "after.ft.sorting": function (e, ft) {
-                initTimers();
-                getEmpDDLUnassigned();// bind to the plugin initialize event to do something
-            },
-            "after.ft.paging": function (e, ft) {
-                initTimers();
-                getEmpDDLUnassigned();// bind to the plugin initialize event to do something
+    <div id="currentDDL" style="display:none;"></div>
+
+    <div class="modal fade" id="editor-modal" tabindex="-1" role="dialog" aria-labelledby="editor-title">
+        <style scoped>
+            /* provides a red astrix to denote required fields - this should be included in common stylesheet */
+            .form-group.required .control-label:after {
+                content: "*";
+                color: red;
+                margin-left: 4px;
             }
-         }).footable({
-             "editing": {
-                 editRow: function (row) {
-                     var values = row.val();
-                     if (!values.assignedOn) {
-                         return
-                     }
-                     
-                     // we need to find and set the initial value for the editor inputs
-                     $editor.find('#id').val(values.invoiceId);
-                     $editor.find('#employeeName').text(values.assignedEmployee);
-                     $editor.find('#pickedPartsText').text(values.numOfParts);
-                     $editor.find('#pickedParts').val(values.numOfParts);
+        </style>
+        <div class="modal-dialog" role="document">
+            <form class="modal-content form-horizontal" id="editor">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title" id="editor-title"></h4>
+                </div>
+                <div class="modal-body">
+                    <p>Did <span id="employeeName"></span> pick all <span id="pickedPartsText"></span> parts on the invoice?</p>
+                    <p>If not, please indicate number of parts picked below before closing the invoice. Otherwise leave as is:</p>
+                    <input type="number" id="id" name="id" class="hidden" />
+                    <div class="form-group required">
+                        <label for="firstName" class="col-sm-3 control-label"># of Parts</label>
+                        <div class="col-md-2">
+                            <input type="number" class="form-control" id="pickedParts" name="pickedParts" min="1" max="99" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save and Close Invoice</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    @section Scripts {
+        <script>
 
-                     $modal.data('row', row); // set the row data value for use later
-                     $editorTitle.html('Close Out Invoice - <strong>' + values.invoiceNo + '</strong>'); // set the modal title
-                     $modal.modal('show'); // display the modal
-                 },
-                 deleteRow: function (row) {
-                     var values = row.val();
-                     // This example displays a confirm popup and then simply removes the row but you could just
-                     // as easily make an ajax call and then only remove the row once you retrieve a response.
-                     if (confirm("Are you sure you want to cancel invoice " + values.invoiceNo + "?")) {
-                         $.ajax({
-                             type: "POST",
-                             url: "/Dashboard/CancelInvoice/" + values.invoiceId,
-                             //data: { id: clickedButton.val(), access_token: $("#access_token").val() },
-                             success: function (result) {
-                                 row.delete();
-                                 getEmpDDLUnassigned();
-                             },
-                             error: function (result) {
-                                 alert("An error occurred canceling the invoice.")
-                             }
-                         });
-                         
-                     }
-                 }
-             }
-         });
+            var $modal = $('#editor-modal'),
+                $editor = $('#editor'),
+                $editorTitle = $('#editor-title');
 
-        //$('.table').footable();
-    });
 
-        $('.table').last().data("paging-widget-count-format", "Total Pending Offsite: {TR}");
-        $('.showHide').last().data("visible", false);
+            jQuery(function ($) {
+                $('.table').on({
+                    "ready.ft.table": function (e, ft) {
+                        //initTimers();// bind to the plugin initialize event to do something
+                        //getEmpDDLUnassigned();
+                    },
+                    "after.ft.filtering": function (e, ft) {
+                        initTimers();
+                        getEmpDDLUnassigned();// bind to the plugin initialize event to do something
+                    },
+                    "after.ft.sorting": function (e, ft) {
+                        initTimers();
+                        getEmpDDLUnassigned();// bind to the plugin initialize event to do something
+                    },
+                    "after.ft.paging": function (e, ft) {
+                        initTimers();
+                        getEmpDDLUnassigned();// bind to the plugin initialize event to do something
+                    }
+                }).footable({
+                    "editing": {
+                        editRow: function (row) {
+                            var values = row.val();
+                            if (!values.assignedOn) {
+                                return
+                            }
 
-        /*$(document).ready(function () {
-            $(".aa").each(function (i) {
-                $(this).countdown({
-                    since: new Date(Date.parse($(this).text())),
-                    layout: '{hnn}:{mnn}:{snn}{desc}',
-                    format: 'HMS'
+                            // we need to find and set the initial value for the editor inputs
+                            $editor.find('#id').val(values.invoiceId);
+                            $editor.find('#employeeName').text(values.assignedEmployee);
+                            $editor.find('#pickedPartsText').text(values.numOfParts);
+                            $editor.find('#pickedParts').val(values.numOfParts);
+
+                            $modal.data('row', row); // set the row data value for use later
+                            $editorTitle.html('Close Out Invoice - <strong>' + values.invoiceNo + '</strong>'); // set the modal title
+                            $modal.modal('show'); // display the modal
+                        },
+                        deleteRow: function (row) {
+                            var values = row.val();
+                            // This example displays a confirm popup and then simply removes the row but you could just
+                            // as easily make an ajax call and then only remove the row once you retrieve a response.
+                            if (confirm("Are you sure you want to cancel invoice " + values.invoiceNo + "?")) {
+                                $.ajax({
+                                    type: "POST",
+                                    url: "/Dashboard/CancelInvoice/" + values.invoiceId,
+                                    //data: { id: clickedButton.val(), access_token: $("#access_token").val() },
+                                    success: function (result) {
+                                        row.delete();
+                                        getEmpDDLUnassigned();
+                                    },
+                                    error: function (result) {
+                                        alert("An error occurred canceling the invoice.")
+                                    }
+                                });
+
+                            }
+                        }
+                    }
                 });
+
+                //$('.table').footable();
             });
-        });*/
-        function initTimers() {
-            $(".timerCell:not(.is-countdown)").each(function (i) {
-                if ($(this).text()) {
+
+            $('.table').last().data("paging-widget-count-format", "Total Pending Offsite: {TR}");
+            $('.hideLocation').last().data("visible", false);
+            $('.hideAssigned').last().data("visible", false);
+
+            /*$(document).ready(function () {
+                $(".aa").each(function (i) {
                     $(this).countdown({
-                        //since: new Date(parseInt(setDate[0]), (parseInt(setDate[1]) - 1), parseInt(setDate[2]), parseInt(setDate[3]), parseInt(setDate[4]), parseInt(setDate[5])),
-                        //since: new Date(2018, 1, 19, 23, 50, 0),
-                        since: new Date(+$(this).text()),
+                        since: new Date(Date.parse($(this).text())),
                         layout: '{hnn}:{mnn}:{snn}{desc}',
                         format: 'HMS'
                     });
-                }
-            });
-        }
+                });
+            });*/
+            function initTimers() {
+                $(".timerCell:not(.is-countdown)").each(function (i) {
+                    if ($(this).text()) {
+                        $(this).countdown({
+                            //since: new Date(parseInt(setDate[0]), (parseInt(setDate[1]) - 1), parseInt(setDate[2]), parseInt(setDate[3]), parseInt(setDate[4]), parseInt(setDate[5])),
+                            //since: new Date(2018, 1, 19, 23, 50, 0),
+                            since: new Date(+$(this).text()),
+                            layout: '{hnn}:{mnn}:{snn}{desc}',
+                            format: 'HMS'
+                        });
+                    }
+                });
+            }
 
-        function getEmpDDLUnassigned() {
-            //alert('another');
-            $.ajax({
-                type: "GET",
-                url: "/Dashboard/GetEmployeeDDLUnassigned/",
-                //data: { id: clickedButton.val(), access_token: $("#access_token").val() },
-                success: function (result) {
-                    $("#currentDDL").html(result)
-                },
-                error: function (result) {
-                    $("#currentDDL").html("<span style=\"color:red;\">An error occurred. Please refresh the page.</span>");
-                }
-            }).done(function () {
+            function getEmpDDLUnassigned() {
+                //alert('another');
+                $.ajax({
+                    type: "GET",
+                    url: "/Dashboard/GetEmployeeDDLUnassigned/",
+                    //data: { id: clickedButton.val(), access_token: $("#access_token").val() },
+                    success: function (result) {
+                        $("#currentDDL").html(result)
+                    },
+                    error: function (result) {
+                        $("#currentDDL").html("<span style=\"color:red;\">An error occurred. Please refresh the page.</span>");
+                    }
+                }).done(function () {
 
-                //alert($("#currentDDL").children('select').children('option').length);
-                if ($("#currentDDL").children('select').children('option').length > 1) {
-                    $(".empDDL").each(function (i) {
-                        $(this).html($("#currentDDL").html());
-                        disableCloseButtonForRow($(this));
-                    });
-                }
-                else {
-                    $(".empDDL").each(function (i) {
-                        $(this).html("No available employees!");
-                        disableCloseButtonForRow($(this));
-                    });
+                    //alert($("#currentDDL").children('select').children('option').length);
+                    if ($("#currentDDL").children('select').children('option').length > 1) {
+                        $(".empDDL").each(function (i) {
+                            $(this).html($("#currentDDL").html());
+                            disableCloseButtonForRow($(this));
+                        });
+                    }
+                    else {
+                        $(".empDDL").each(function (i) {
+                            $(this).html("No available employees!");
+                            disableCloseButtonForRow($(this));
+                        });
 
-                }
-            });
-        }
+                    }
+                });
+            }
 
-        function disableCloseButtonForRow(dropdownInRow) {
-            dropdownInRow.closest("tr").find(".btn.btn-default.footable-edit").addClass("disabled");
-        }
-        function enableCloseButtonForRow(clickedButtonInRow) {
-            clickedButtonInRow.closest("tr").find(".btn.btn-default.footable-edit.disabled").removeClass("disabled");
-        }
+            function disableCloseButtonForRow(dropdownInRow) {
+                dropdownInRow.closest("tr").find(".btn.btn-default.footable-edit").addClass("disabled");
+            }
+            function enableCloseButtonForRow(clickedButtonInRow) {
+                clickedButtonInRow.closest("tr").find(".btn.btn-default.footable-edit.disabled").removeClass("disabled");
+            }
 
-        $(document).ready(function () {
-            initTimers();
-            getEmpDDLUnassigned();
-        });
-
-        /*function getEmpDDL(element) {
-
-            //initTimers();
-            var clickedButton = element;
-            //element.closest("tr").find(".aa").html("glodi");
-            //var rowId = element.closest("tr").find(".invoiceid").html();
-            $.ajax({
-                type: "GET",
-                url: "/Dashboard/GetEmployeeDDL/",
-                //data: { id: clickedButton.val(), access_token: $("#access_token").val() },
-                success: function (result) {
-                    element.parent().html(result);
-                },
-                error: function (result) {
-                    element.parent().html("<span style=\"color:red;\">An error occurred. Please refresh the page.</span>");
-                }
-            });
-        }*/
-
-        function assignEmp(element) {
-
-            var clickedButton = element;
-            //console.log(clickedButton);
-            var rowId = element.closest("tr").find(".invoiceid").html();
-            //console.log(rowId)
-            var selectedEmployee = element.closest("tr").find("select").val();
-            var currentRow = FooTable.getRow(element);
-            //console.log(selectedEmployee);
-            //add check for empty value, return false:
-
-            $.ajax({
-                type: "POST",
-                url: "/Dashboard/AssignEmployee/" + rowId + "/" + selectedEmployee,
-                //data: { id: clickedButton.val(), access_token: $("#access_token").val() },
-                success: function (result) {
-                    //element.closest("td").html("<span>" + result + "</span>");
-                    var parsedResult = JSON.parse(result);
-                    enableCloseButtonForRow(clickedButton);
-                    var rowTimerCell = clickedButton.closest("tr").find(".setTimer");
-                    currentRow.val({ assignedEmployee: parsedResult.assignedEmployee, elapsedTime: parsedResult.assignedOn });
-                    //currentRow.val({ assignedEmployee: parsedResult.assignedEmployee, assignedOn: parsedResult.assignedOn, elapsedTime: parsedResult.assignedOn });
- 
-                    rowTimerCell.removeClass("setTimer").addClass("timerCell");
-                    initTimers();
-                    getEmpDDLUnassigned();
-                },
-                error: function (result) {
-                    element.closest("td").html("<span style=\"color:red;\">An error occurred. Please refresh the page.</span>");
-                }
+            $(document).ready(function () {
+                initTimers();
+                getEmpDDLUnassigned();
             });
 
-        }
+            /*function getEmpDDL(element) {
 
-        $editor.on('submit', function (e) {
-            if (this.checkValidity && !this.checkValidity()) return; // if validation fails exit early and do nothing.
-            e.preventDefault(); // stop the default post back from a form submit
-            var row = $modal.data('row'); // get any previously stored row object
+                //initTimers();
+                var clickedButton = element;
+                //element.closest("tr").find(".aa").html("glodi");
+                //var rowId = element.closest("tr").find(".invoiceid").html();
+                $.ajax({
+                    type: "GET",
+                    url: "/Dashboard/GetEmployeeDDL/",
+                    //data: { id: clickedButton.val(), access_token: $("#access_token").val() },
+                    success: function (result) {
+                        element.parent().html(result);
+                    },
+                    error: function (result) {
+                        element.parent().html("<span style=\"color:red;\">An error occurred. Please refresh the page.</span>");
+                    }
+                });
+            }*/
+
+            function assignEmp(element) {
+
+                var clickedButton = element;
+                //console.log(clickedButton);
+                var rowId = element.closest("tr").find(".invoiceid").html();
+                //console.log(rowId)
+                var selectedEmployee = element.closest("tr").find("select").val();
+                var currentRow = FooTable.getRow(element);
+                //console.log(selectedEmployee);
+                //add check for empty value, return false:
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Dashboard/AssignEmployee/" + rowId + "/" + selectedEmployee,
+                    //data: { id: clickedButton.val(), access_token: $("#access_token").val() },
+                    success: function (result) {
+                        //element.closest("td").html("<span>" + result + "</span>");
+                        var parsedResult = JSON.parse(result);
+                        enableCloseButtonForRow(clickedButton);
+                        var rowTimerCell = clickedButton.closest("tr").find(".setTimer");
+                        currentRow.val({ assignedEmployee: parsedResult.assignedEmployee, elapsedTime: parsedResult.assignedOn });
+                        //currentRow.val({ assignedEmployee: parsedResult.assignedEmployee, assignedOn: parsedResult.assignedOn, elapsedTime: parsedResult.assignedOn });
+
+                        rowTimerCell.removeClass("setTimer").addClass("timerCell");
+                        initTimers();
+                        getEmpDDLUnassigned();
+                    },
+                    error: function (result) {
+                        element.closest("td").html("<span style=\"color:red;\">An error occurred. Please refresh the page.</span>");
+                    }
+                });
+
+            }
+
+            $editor.on('submit', function (e) {
+                if (this.checkValidity && !this.checkValidity()) return; // if validation fails exit early and do nothing.
+                e.preventDefault(); // stop the default post back from a form submit
+                var row = $modal.data('row'); // get any previously stored row object
                 /*values = { // create a hash of the editor row values
                     id: $editor.find('#id').val(),
                     firstName: $editor.find('#firstName').val(),
@@ -273,27 +343,27 @@
                     dob: moment($editor.find('#dob').val(), 'YYYY-MM-DD')
                 };*/
 
-            if (row instanceof FooTable.Row) { // if we have a row object then this is an edit operation
-                // here you can execute an ajax call to the server and then only update the row once the result is
-                // retrieved. This example simply updates the row straight away.
-                row.delete();
-                $modal.modal('hide');
-            } else {
-                $modal.html("<span style=\"color:red;\">An error occurred, please refresh the page and try again.</span>");
+                if (row instanceof FooTable.Row) { // if we have a row object then this is an edit operation
+                    // here you can execute an ajax call to the server and then only update the row once the result is
+                    // retrieved. This example simply updates the row straight away.
+                    row.delete();
+                    $modal.modal('hide');
+                } else {
+                    $modal.html("<span style=\"color:red;\">An error occurred, please refresh the page and try again.</span>");
+                }
+
+            });
+
+            function mySortValue(valueOrElement) {
+                if (FooTable.is.element(valueOrElement) || FooTable.is.jq(valueOrElement)) { var sortVal = this.parser(valueOrElement); if (sortVal == null) { sortVal = 9999999999999; } return jQuery(valueOrElement).data('sortValue') || sortVal; }
+                if (FooTable.is.hash(valueOrElement) && FooTable.is.hash(valueOrElement.options)) {
+                    if (FooTable.is.string(valueOrElement.options.sortValue)) return valueOrElement.options.sortValue;
+                    if (FooTable.is.defined(valueOrElement.value)) valueOrElement = valueOrElement.value;
+                }
+                if (FooTable.is.defined(valueOrElement) && valueOrElement != null) return valueOrElement;
+                return null;
             }
-            
-        });
-
-        function mySortValue(valueOrElement) {
-            if (FooTable.is.element(valueOrElement) || FooTable.is.jq(valueOrElement)) { var sortVal = this.parser(valueOrElement); if (sortVal == null) { sortVal = 9999999999999; } return jQuery(valueOrElement).data('sortValue') || sortVal; }
-            if (FooTable.is.hash(valueOrElement) && FooTable.is.hash(valueOrElement.options)) {
-                if (FooTable.is.string(valueOrElement.options.sortValue)) return valueOrElement.options.sortValue;
-                if (FooTable.is.defined(valueOrElement.value)) valueOrElement = valueOrElement.value;
-            }
-            if (FooTable.is.defined(valueOrElement) && valueOrElement != null) return valueOrElement;
-            return null;
-        }
 
 
-</script>
-}
+        </script>
+    }

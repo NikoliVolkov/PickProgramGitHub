@@ -88,3 +88,9 @@
 #pickedPartsText, #employeeName {
     font-weight: bold;
 }
+
+.stats {
+    font-weight: bold;
+    font-size: 24px;
+    margin-top: 24px;
+}
