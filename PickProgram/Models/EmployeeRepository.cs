@@ -27,7 +27,8 @@ namespace PickProgram.Models
         {
             //var invoicesWithAssigned = new HashSet<int?>(_dbConnection.Invoice.Include(p => p.AssignedEmployee).Select(p => p.AssignedEmployeeId));
             //var result = _dbConnection.Employee.Where(x => !invoicesWithAssigned.Contains(x.EmployeeId));
-            var result = _dbConnection.Employee.Where(x => x.Invoice.Count == 0);
+            //var result = _dbConnection.Employee.Where(x => x.Invoice.Count == 0);
+            var result = _dbConnection.Employee.FromSql("dbo.pGetUnassignedEmployees");
             return result;
         }
     }

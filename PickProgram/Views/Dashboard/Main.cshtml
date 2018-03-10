@@ -44,8 +44,11 @@
         <div id="offsiteTable" class="col-md-7">
             @Html.Partial("_InvoiceList", Model.ListOfInvoicesOffsite)
         </div>
-        <div id="employeeStats" class="col-md-5">
-            @await Component.InvokeAsync("Stats")
+        <div class="col-md-5">
+            <h3 class="stats"><span class="glyphicon glyphicon-tasks" style="font-size:20px"></span> Today's Stats</h3>
+            <div id="statsTable">
+                @await Component.InvokeAsync("Stats")
+            </div>
         </div>
     </div>
 </div>
@@ -69,18 +72,20 @@
                     <h4 class="modal-title" id="editor-title"></h4>
                 </div>
                 <div class="modal-body">
-                    <p>Did <span id="employeeName"></span> pick all <span id="pickedPartsText"></span> parts on the invoice?</p>
-                    <p>If not, please indicate number of parts picked below before closing the invoice. Otherwise leave as is:</p>
-                    <input type="number" id="id" name="id" class="hidden" />
-                    <div class="form-group required">
-                        <label for="pickedParts" class="col-sm-3 control-label"># of Parts</label>
-                        <div class="col-md-2">
-                            <input type="number" class="form-control" id="pickedParts" name="pickedParts" min="1" max="99" required>
-                        </div>
-                    </div>
+                    <p>Did <span id="employeeName"></span> complete pulling for invoice #<span id="invoiceNoText"></span>?</p>
+                    <input type="number" id="modalInvoiceId" name="modalInvoiceId" class="hidden" />
+                    <!--<p>Did <span id="employeeName"></span> pick all <span id="pickedPartsText"></span> parts on the invoice?</p>
+    <p>If not, please indicate number of parts picked below before closing the invoice. Otherwise leave as is:</p>
+    <input type="number" id="id" name="id" class="hidden" />
+    <div class="form-group required">
+        <label for="pickedParts" class="col-sm-3 control-label"># of Parts</label>
+        <div class="col-md-2">
+            <input type="number" class="form-control" id="pickedParts" name="pickedParts" min="1" max="99" required>
+        </div>
+    </div>--->
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Save and Close Invoice</button>
+                    <button type="submit" class="btn btn-primary">Yes, Close Invoice</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
                 </div>
             </form>
@@ -120,10 +125,11 @@
                             }
 
                             // we need to find and set the initial value for the editor inputs
-                            $editor.find('#id').val(values.invoiceId);
+                            $editor.find('#modalInvoiceId').val(values.invoiceId);
                             $editor.find('#employeeName').text(values.assignedEmployee);
-                            $editor.find('#pickedPartsText').text(values.numOfParts);
-                            $editor.find('#pickedParts').val(values.numOfParts);
+                            $editor.find('#invoiceNoText').text(values.invoiceNo);
+                            //$editor.find('#pickedPartsText').text(values.numOfParts);
+                            //$editor.find('#pickedParts').val(values.numOfParts);
 
                             $modal.data('row', row); // set the row data value for use later
                             $editorTitle.html('Close Out Invoice - <strong>' + values.invoiceNo + '</strong>'); // set the modal title
@@ -221,29 +227,30 @@
                 clickedButtonInRow.closest("tr").find(".btn.btn-default.footable-edit.disabled").removeClass("disabled");
             }
 
+            function refreshStats() {
+
+                $("#statsTable").html("<div class=\"footable-loader\"><span class=\"fooicon fooicon-loader\"></span></div>");
+                $.ajax({
+                    type: "GET",
+                    url: "/Dashboard/GetStatsVC/",
+                    //data: { id: clickedButton.val(), access_token: $("#access_token").val() },
+                    success: function (result) {
+                        //spinner.stop();
+                        $("#statsTable").html(result)
+                    },
+                    error: function (result) {
+                        //spinner.stop();
+                        $("#statsTable").html("<h4 style=\"color:red;\">An error occurred fetching stats. Please refresh the page.</h4>");
+                    }
+                });
+            }
+
+
             $(document).ready(function () {
                 initTimers();
                 getEmpDDLUnassigned();
             });
 
-            /*function getEmpDDL(element) {
-
-                //initTimers();
-                var clickedButton = element;
-                //element.closest("tr").find(".aa").html("glodi");
-                //var rowId = element.closest("tr").find(".invoiceid").html();
-                $.ajax({
-                    type: "GET",
-                    url: "/Dashboard/GetEmployeeDDL/",
-                    //data: { id: clickedButton.val(), access_token: $("#access_token").val() },
-                    success: function (result) {
-                        element.parent().html(result);
-                    },
-                    error: function (result) {
-                        element.parent().html("<span style=\"color:red;\">An error occurred. Please refresh the page.</span>");
-                    }
-                });
-            }*/
 
             function assignEmp(element) {
 
@@ -291,17 +298,27 @@
                     startedOn: moment($editor.find('#startedOn').val(), 'YYYY-MM-DD'),
                     dob: moment($editor.find('#dob').val(), 'YYYY-MM-DD')
                 };*/
-
+                //alert($editor.find('#modalInvoiceId').val());
                 if (row instanceof FooTable.Row) { // if we have a row object then this is an edit operation
                     // here you can execute an ajax call to the server and then only update the row once the result is
                     // retrieved. This example simply updates the row straight away.
-                    row.delete();
-
-                    $modal.modal('hide');
-                    initTimers();
-                    getEmpDDLUnassigned();
+                    $.ajax({
+                        type: "POST",
+                        url: "/Dashboard/CloseInvoice/" + $editor.find('#modalInvoiceId').val(),
+                        //data: { id: clickedButton.val(), access_token: $("#access_token").val() },
+                        success: function (result) {
+                            row.delete();
+                            $modal.modal('hide');
+                            initTimers();
+                            getEmpDDLUnassigned();
+                            refreshStats();
+                        },
+                        error: function (result) {
+                            $editor.find(".modal-body").html("<div style=\"color:red;\">An error occurred, please refresh the page and try again.</div>");
+                        }
+                    });
                 } else {
-                    $modal.html("<span style=\"color:red;\">An error occurred, please refresh the page and try again.</span>");
+                    $editor.find(".modal-body").html("<div style=\"color:red;\">An error occurred, please refresh the page and try again.</div>");
                 }
 
             });

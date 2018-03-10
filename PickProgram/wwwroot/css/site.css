@@ -85,7 +85,7 @@
     float: none;
 }
 
-#pickedPartsText, #employeeName {
+#pickedPartsText, #employeeName, #invoiceNoText {
     font-weight: bold;
 }
 
@@ -93,4 +93,8 @@
     font-weight: bold;
     font-size: 24px;
     margin-top: 24px;
+}
+
+#statsTable .footable-loader{
+    height: 125px;
 }

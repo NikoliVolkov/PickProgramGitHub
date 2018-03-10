@@ -73,6 +73,38 @@ namespace PickProgram.Models
 
         }
 
+        public IActionResult CloseInvoice(int invoiceId)
+        {
+            //_dbConnection.Invoice.Remove(_dbConnection.Invoice.Find(invoiceId));
+            //_dbConnection.SaveChanges();
+
+                using (var transaction = _dbConnection.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        var completedId = _dbConnection.InvoiceStatus.Single(p => p.Status == "Complete").StatusId;
+                        var invoice = _dbConnection.Invoice.Find(invoiceId);
+                        var zone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+                        var utcNow = DateTime.UtcNow;
+                        var pacificNow = TimeZoneInfo.ConvertTimeFromUtc(utcNow, zone);
+                        invoice.FinishDate = pacificNow;
+                        invoice.StatusId = completedId;
+                        _dbConnection.SaveChanges();
+
+                    // Commit transaction if all commands succeed, transaction will auto-rollback
+                    // when disposed if either commands fails
+                        transaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        transaction.Rollback();
+                        return new BadRequestResult();
+                    }
+                }
+
+            return new OkResult();
+        }
+
         public void CancelInvoice(int invoiceId)
         {
             _dbConnection.Invoice.Remove(_dbConnection.Invoice.Find(invoiceId));
