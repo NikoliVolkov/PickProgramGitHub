@@ -4,13 +4,13 @@
 <form class="form-horizontal" asp-controller="Dashboard" asp-action="" method="post">
     <div asp-validation-summary="All" class="text-danger"></div>
     <div class="form-group">
-        <label class="col-md-2 control-label" asp-for="NewInvoice.InvoiceNumber">Invoice Number <span class="glyphicon glyphicon-qrcode"></span></label>
-        <div class="col-md-2">
-            <input asp-for="NewInvoice.InvoiceNumber" class="form-control" />
+        <!--<label class="col-md-1 control-label" asp-for="NewInvoice.InvoiceNumber">Invoice # <span class="glyphicon glyphicon-qrcode"></span</label>-->
+        <div class="col-md-3">
+            <input asp-for="NewInvoice.InvoiceNumber" class="form-control" placeholder="Invoice #" />
         </div>
         <!--<label class="col-md-2 control-label" asp-for="NewInvoice.NumberOfParts">No. of Parts</label>-->
         <div class="col-md-2">
-            <input asp-for="NewInvoice.NumberOfParts" class="form-control" min="1" max="99" placeholder="No. of Parts"/>
+            <input asp-for="NewInvoice.NumberOfParts" class="form-control" min="1" max="99" placeholder="# of Parts" />
         </div>
         <!--<label class="col-md-2 control-label" asp-for="NewInvoice.PickLocationId"></label>-->
         <div class="col-md-3">
@@ -24,12 +24,15 @@
                 <option value="">-- Assign Employee --</option>
             </select>
         </div>
+        <div class="col-md-1">
+            <input asp-for="NewInvoice.StatusId" type="hidden" value="1" />
+            <input type="submit" class="btn btn-primary" value="Add" />
+        </div>
     </div>
     <!--<div class="form-group">
 
     </div>-->
-    <input asp-for="NewInvoice.StatusId" type="hidden" value="1" />
-    <input type="submit" class="btn btn-primary" value="Add" />
+
 </form>
 
 <div class="container-fluid">
@@ -41,8 +44,8 @@
         <div id="offsiteTable" class="col-md-7">
             @Html.Partial("_InvoiceList", Model.ListOfInvoicesOffsite)
         </div>
-        <div class="col-md-5">
-            @Html.Partial("_StatsSection")
+        <div id="employeeStats" class="col-md-5">
+            @await Component.InvokeAsync("Stats")
         </div>
     </div>
 </div>
@@ -70,7 +73,7 @@
                     <p>If not, please indicate number of parts picked below before closing the invoice. Otherwise leave as is:</p>
                     <input type="number" id="id" name="id" class="hidden" />
                     <div class="form-group required">
-                        <label for="firstName" class="col-sm-3 control-label"># of Parts</label>
+                        <label for="pickedParts" class="col-sm-3 control-label"># of Parts</label>
                         <div class="col-md-2">
                             <input type="number" class="form-control" id="pickedParts" name="pickedParts" min="1" max="99" required>
                         </div>

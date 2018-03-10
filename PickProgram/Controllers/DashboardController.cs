@@ -73,7 +73,7 @@ namespace PickProgram.Controllers
                 empSelectList.Add(new SelectListItem()
                 {
                     Value = x.EmployeeId.ToString(),
-                    Text = x.FirstName + " " + x.LastName
+                    Text = x.Nickname
                 });
             }
 
@@ -83,13 +83,13 @@ namespace PickProgram.Controllers
         public List<SelectListItem> PopulateEmployeeSelectListOnsite()
         {
             var empSelectList = new List<SelectListItem>();
-            var empList = _employeeRepository.GetEmployeesUnassigned().Where(e => e.FirstName != "Offsite").ToList();
+            var empList = _employeeRepository.GetEmployeesUnassigned().Where(e => e.Nickname != "Offsite").ToList();
             foreach (var x in empList)
             {
                 empSelectList.Add(new SelectListItem()
                 {
                     Value = x.EmployeeId.ToString(),
-                    Text = x.FirstName + " " + x.LastName
+                    Text = x.Nickname
                 });
             }
 
@@ -109,6 +109,12 @@ namespace PickProgram.Controllers
         public List<Invoice> GetOffsiteInvoices()
         {
             return _invoiceRepository.GetInvoices().Where(p => p.PickLocation.LocationDescription == "Offsite").OrderBy(p => p.AssignedDate).ToList();
+        }
+
+        public IActionResult GetStatsVC()
+        {
+            //return PartialView("_StatSection", svm);
+            return ViewComponent("Stats");
         }
 
         public IActionResult GetEmployeeDDL()

@@ -9,6 +9,7 @@ namespace PickProgram.Models
     public interface IInvoiceRepository
     {
         IEnumerable<Invoice> GetInvoices();
+        IQueryable<Invoice> GetCompletedInvoicesForToday();
         Invoice GetInvoiceById(int invoiceId);
         void AddInvoice(Invoice newInvoice);
         string AssignEmployee(int invoiceId, int employeeId);

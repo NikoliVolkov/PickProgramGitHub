@@ -2,17 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using PickProgram.Models;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
-
-namespace PickProgram.ViewModels
+namespace PickProgram.Models
 {
-    public class StatsViewModel
+    public partial class EmployeeStat
     {
+        public string Nickname { get; set; }
         public int TotalInvoices { get; set; }
         public int TotalParts { get; set; }
-        public List<EmployeeStat> EmployeeStats{ get; set; }
     }
-
 }

@@ -1,0 +1,33 @@
+﻿@model StatsViewModel
+
+<h3 class="stats"><span class="glyphicon glyphicon-tasks" style="font-size:20px"></span> Today's Stats</h3>
+
+@if (Model.TotalInvoices == 0)
+{
+    <h4>No stats available yet for today. Get pullin'!</h4>
+}
+else
+{
+<div><strong>Total Invoices: </strong>@Model.TotalInvoices</div>
+<div><strong>Total Parts Pulled: </strong>@Model.TotalParts</div>
+<table class="table" data-sorting="true">
+    <thead>
+        <tr>
+            <th>Employee</th>
+            <th data-type="number">Total Invoices</th>
+            <th data-type="number"># of Parts Pulled</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var e in Model.EmployeeStats)
+        {
+            <tr>
+                <td>@e.Nickname</td>
+                <td>@e.TotalInvoices</td>
+                <td>@e.TotalParts</td>
+            </tr>
+
+        }
+    </tbody>
+</table>
+}

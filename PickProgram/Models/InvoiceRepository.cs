@@ -26,6 +26,16 @@ namespace PickProgram.Models
             var invoiceData = _dbConnection.Invoice.Include(p => p.Status).Include(p => p.AssignedEmployee).Include(p => p.PickLocation);
             return invoiceData;
         }
+
+        public IQueryable<Invoice> GetCompletedInvoicesForToday()
+        {
+            var today = DateTime.Today;
+            var completedInvoicesForToday = _dbConnection.Invoice.Include(p => p.Status).Include(p => p.AssignedEmployee).Where(p => p.FinishDate.Value.Date == today && p.Status.Status == "Complete");
+            //var today = DateTime.Today;
+            //var q = db.Games.Where(t => DbFunctions.TruncateTime(t.StartDate) >= today);
+
+            return completedInvoicesForToday.AsQueryable();
+        }
         
         public void AddInvoice(Invoice newInvoice)
         {
@@ -59,7 +69,7 @@ namespace PickProgram.Models
 
 
             var emp = _dbConnection.Employee.Find(employeeId);
-            return JsonConvert.SerializeObject(new { assignedEmployee = emp.FirstName + " " + emp.LastName, assignedOn = jsTimestamp });
+            return JsonConvert.SerializeObject(new { assignedEmployee = emp.Nickname, assignedOn = jsTimestamp });
 
         }
 
