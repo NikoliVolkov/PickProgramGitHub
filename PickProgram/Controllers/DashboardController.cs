@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PickProgram.Models;
 using PickProgram.ViewModels;
+//using Newtonsoft.Json;
 
 
 namespace PickProgram.Controllers
@@ -25,7 +26,7 @@ namespace PickProgram.Controllers
         {
             var dvm = new DashboardViewModel()
             {
-                Employees = PopulateEmployeeSelectList(),
+                Employees = PopulateEmployeeSelectListOnsite(),
                 PickLocations = GetPickLocations(),
                 ListOfInvoicesOnsite = GetOnsiteInvoices(),
                 ListOfInvoicesOffsite = GetOffsiteInvoices()
@@ -45,40 +46,36 @@ namespace PickProgram.Controllers
                 {
                     dvm.NewInvoice.AssignedDate = pacificNow;
                 }
+
                 _invoiceRepository.AddInvoice(dvm.NewInvoice);
-                /*var dvmUpdated = new DashboardViewModel()
-                {
-                    SuccessMessage = "Invoice created successfully.",
-                    Employees = PopulateEmployeeSelectList(),
-                    PickLocations = _picklocationRepository.GetPickLocations().ToList(),
-                    ListOfInvoices = _invoiceRepository.GetInvoices().OrderBy(p => p.StartDate).ToList()
-                };*/
-                TempData["Message"] = "Invoice created successfully.";
+
+                TempData["Message"] = "Invoice created successfully.";                
+
                 return RedirectToAction("Main");
-                //return View(dvmUpdated);
+
             }
 
-            dvm.Employees = PopulateEmployeeSelectList();
+            dvm.Employees = PopulateEmployeeSelectListOnsite();
             dvm.PickLocations = GetPickLocations();
             dvm.ListOfInvoicesOnsite = GetOnsiteInvoices();
             return View(dvm);
         }
-
-        public List<SelectListItem> PopulateEmployeeSelectList()
+        /* No need to use this, can update using jquery
+        public string RefreshEmployeeSelectList()
         {
-            var empSelectList = new List<SelectListItem>();
-            var empList =_employeeRepository.GetEmployees().ToList();
+            var empArray = new List<Object>();
+            var empList =_employeeRepository.GetEmployeesUnassigned().Where(e => e.Nickname != "Offsite").OrderBy(e => e.Nickname).ToList();
             foreach(var x in empList)
             {
-                empSelectList.Add(new SelectListItem()
+                empArray.Add(new
                 {
                     Value = x.EmployeeId.ToString(),
                     Text = x.Nickname
                 });
             }
 
-            return empSelectList.OrderBy(x => x.Text).ToList();
-        }
+            return JsonConvert.SerializeObject(empArray);
+        }*/
 
         public List<SelectListItem> PopulateEmployeeSelectListOnsite()
         {
@@ -117,11 +114,6 @@ namespace PickProgram.Controllers
             return ViewComponent("Stats");
         }
 
-        public IActionResult GetEmployeeDDL()
-        {
-            var empSelectList = PopulateEmployeeSelectList();
-            return PartialView("_EmployeeDropdown", empSelectList);
-        }
         public IActionResult GetEmployeeDDLUnassigned()
         {
             var empSelectList = PopulateEmployeeSelectListOnsite();
@@ -137,9 +129,9 @@ namespace PickProgram.Controllers
             return _invoiceRepository.CloseInvoice(id);
         }
         [HttpPost]
-        public void CancelInvoice(int id)
+        public IActionResult CancelInvoice(int id)
         {
-            _invoiceRepository.CancelInvoice(id);
+            return _invoiceRepository.CancelInvoice(id);
         }
     }
 }

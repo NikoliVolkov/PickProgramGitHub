@@ -85,7 +85,7 @@
     float: none;
 }
 
-#pickedPartsText, #employeeName, #invoiceNoText {
+#pickedPartsText, #employeeName, #invoiceNoText, #invoiceNoText-cancel {
     font-weight: bold;
 }
 

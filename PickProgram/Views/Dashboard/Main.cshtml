@@ -19,7 +19,7 @@
             </select>
         </div>
         <!--<label class="col-md-2 control-label" asp-for="NewInvoice.AssignedEmployeeId"></label>-->
-        <div class="col-md-3">
+        <div class="col-md-3" id="employeeList">
             <select asp-for="NewInvoice.AssignedEmployeeId" asp-items="@Model.Employees" class="form-control">
                 <option value="">-- Assign Employee --</option>
             </select>
@@ -91,12 +91,37 @@
             </form>
         </div>
     </div>
+    
+        <div class="modal fade" id="editor-modal-cancel" tabindex="-2" role="dialog" aria-labelledby="editor-title">
+        <div class="modal-dialog" role="document">
+            <form class="modal-content form-horizontal" id="editor-cancel">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    <h4 class="modal-title" id="editor-title-cancel"></h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to cancel invoice #<span id="invoiceNoText-cancel"></span>?</p>
+                    <p><strong>Note: This operation CANNOT be undone.</strong></p>
+                    <input type="number" id="modalInvoiceId-cancel" name="modalInvoiceId-cancel" class="hidden" />
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Yes, Delete Invoice</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">No, Go Back</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
     @section Scripts {
         <script>
 
             var $modal = $('#editor-modal'),
                 $editor = $('#editor'),
-                $editorTitle = $('#editor-title');
+                $editorTitle = $('#editor-title'),
+                $modalCancel = $('#editor-modal-cancel'),
+                $editorCancel = $('#editor-cancel'),
+                $editorTitleCancel = $('#editor-title-cancel');
 
             jQuery(function ($) {
                 $('.table').on({
@@ -137,24 +162,13 @@
                         },
                         deleteRow: function (row) {
                             var values = row.val();
-                            // This example displays a confirm popup and then simply removes the row but you could just
-                            // as easily make an ajax call and then only remove the row once you retrieve a response.
-                            if (confirm("Are you sure you want to cancel invoice " + values.invoiceNo + "?")) {
-                                $.ajax({
-                                    type: "POST",
-                                    url: "/Dashboard/CancelInvoice/" + values.invoiceId,
-                                    //data: { id: clickedButton.val(), access_token: $("#access_token").val() },
-                                    success: function (result) {
-                                        row.delete();
-                                        initTimers();
-                                        getEmpDDLUnassigned();
-                                    },
-                                    error: function (result) {
-                                        alert("An error occurred canceling the invoice.")
-                                    }
-                                });
+                            // we need to find and set the initial value for the editor inputs
+                            $editorCancel.find('#modalInvoiceId-cancel').val(values.invoiceId);
+                            $editorCancel.find('#invoiceNoText-cancel').text(values.invoiceNo);
 
-                            }
+                            $modalCancel.data('row', row); // set the row data value for use later
+                            $editorTitleCancel.html('Cancel Pulling Invoice - <strong>' + values.invoiceNo + '</strong>'); // set the modal title
+                            $modalCancel.modal('show'); // display the modal
                         }
                     }
                 });
@@ -278,6 +292,7 @@
                         rowTimerCell.removeClass("setTimer").addClass("timerCell");
                         initTimers();
                         getEmpDDLUnassigned();
+                        refreshMainEmpDDLFromDOM();
                     },
                     error: function (result) {
                         element.closest("td").html("<span style=\"color:red;\">An error occurred. Please refresh the page.</span>");
@@ -311,6 +326,7 @@
                             $modal.modal('hide');
                             initTimers();
                             getEmpDDLUnassigned();
+                            refreshMainEmpDDLFromDOM();
                             refreshStats();
                         },
                         error: function (result) {
@@ -319,6 +335,31 @@
                     });
                 } else {
                     $editor.find(".modal-body").html("<div style=\"color:red;\">An error occurred, please refresh the page and try again.</div>");
+                }
+
+            });
+
+            $editorCancel.on('submit', function (e) {
+                e.preventDefault(); // stop the default post back from a form submit
+                var row = $modalCancel.data('row');
+                //alert($editorCancel.find('#modalInvoiceId-cancel').val());
+                if (row instanceof FooTable.Row) { 
+                    $.ajax({
+                        type: "POST",
+                        url: "/Dashboard/CancelInvoice/" + $editorCancel.find('#modalInvoiceId-cancel').val(),
+                        success: function (result) {
+                            row.delete();
+                            $modalCancel.modal('hide');
+                            initTimers();
+                            getEmpDDLUnassigned();
+                            refreshMainEmpDDLFromDOM();
+                        },
+                        error: function (result) {
+                            $editorCancel.find(".modal-body").html("<div style=\"color:red;\">An error occurred, please refresh the page and try again.</div>");
+                        }
+                    });
+                } else {
+                    $editorCancel.find(".modal-body").html("<div style=\"color:red;\">An error occurred, please refresh the page and try again.</div>");
                 }
 
             });
@@ -333,6 +374,51 @@
                 return null;
             }
 
+            $("#NewInvoice_PickLocationId").change(function () {
+
+                var value = $(this).val();
+                if ($(this).find("option:selected").text() == "Offsite") {
+                    //$("#NewInvoice_AssignedEmployeeId").find("option:selected").text("Offsite");
+                    //below might work if I need to select offsite as employee
+                    /*$("#NewInvoice_AssignedEmployeeId option").filter(function () {
+                        //may want to use $.trim in here
+                        return $(this).text() == "Offsite";
+                    }).prop('selected', true);*/
+                    $("#NewInvoice_AssignedEmployeeId").val("");
+                    $("#NewInvoice_AssignedEmployeeId").attr("disabled", "disabled"); 
+                }
+                else {
+                    $("#NewInvoice_AssignedEmployeeId").removeAttr('disabled');
+                    //refreshMainEmpDDLFromDOM();
+                }
+            });
+            // decided not to use this, could avoid ajax call since currentDDL is already loaded with all the latest values for select list
+            /*function refreshMainEmpDDL() {
+                $.ajax({
+                    type: "GET",
+                    url: "/Dashboard/RefreshEmployeeSelectList/",
+                    //data: { id: clickedButton.val(), access_token: $("#access_token").val() },
+                    success: function (result) {
+                        var mainDDL = $("#NewInvoice_AssignedEmployeeId");
+                        mainDDL.empty().append('<option value="">-- Assign Employee --</option>');
+                        var parsedResultArray = JSON.parse(result);
+                        for (var i = 0; i < parsedResultArray.length; i++) {
+                            mainDDL.append('<option value="' + parsedResultArray[i].Value + '">' + parsedResultArray[i].Text + '</option>');
+                        }
+                    },
+                    error: function (result) {
+                        $("#employeeList").html("<span style=\"color:red;\">An error occurred getting employee list. Please refresh the page.</span>");
+                    }
+                });
+            }*/
+            function refreshMainEmpDDLFromDOM() {
+                var mainDDL = $("#NewInvoice_AssignedEmployeeId");
+                mainDDL.empty();
+                $("#currentDDL option").each(function () {
+                    //alert($(this).val() + $(this).text());
+                    mainDDL.append('<option value="' + $(this).val() + '">' + $(this).text() + '</option>');
+                });
+            }
 
         </script>
     }

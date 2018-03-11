@@ -11,9 +11,9 @@ namespace PickProgram.Models
         IEnumerable<Invoice> GetInvoices();
         IQueryable<Invoice> GetCompletedInvoicesForToday();
         Invoice GetInvoiceById(int invoiceId);
-        void AddInvoice(Invoice newInvoice);
+        IActionResult AddInvoice(Invoice newInvoice);
         string AssignEmployee(int invoiceId, int employeeId);
         IActionResult CloseInvoice(int invoiceId);
-        void CancelInvoice(int invoiceId);
+        IActionResult CancelInvoice(int invoiceId);
     }
 }

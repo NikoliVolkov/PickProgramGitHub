@@ -37,10 +37,24 @@ namespace PickProgram.Models
             return completedInvoicesForToday.AsQueryable();
         }
         
-        public void AddInvoice(Invoice newInvoice)
+        public IActionResult AddInvoice(Invoice newInvoice)
         {
-            _dbConnection.Invoice.Add(newInvoice);
-            _dbConnection.SaveChanges();
+            using (var transaction = _dbConnection.Database.BeginTransaction())
+            {
+                try
+                {
+                    _dbConnection.Invoice.Add(newInvoice);
+                    _dbConnection.SaveChanges();
+                    transaction.Commit();
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    return new BadRequestResult();
+                }
+            }
+
+            return new OkResult();
         }
 
         public string AssignEmployee(int invoiceId, int employeeId)
@@ -105,11 +119,25 @@ namespace PickProgram.Models
             return new OkResult();
         }
 
-        public void CancelInvoice(int invoiceId)
+        public IActionResult CancelInvoice(int invoiceId)
         {
-            _dbConnection.Invoice.Remove(_dbConnection.Invoice.Find(invoiceId));
-            _dbConnection.SaveChanges();            
-            
+            using (var transaction = _dbConnection.Database.BeginTransaction())
+            {
+                try
+                {
+                    _dbConnection.Invoice.Remove(_dbConnection.Invoice.Find(invoiceId));
+                    _dbConnection.SaveChanges();
+                    transaction.Commit();
+                }
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    return new BadRequestResult();
+                }
+            }
+
+            return new OkResult();
+
         }
     }
 }
