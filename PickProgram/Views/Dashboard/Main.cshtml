@@ -217,6 +217,7 @@
                     }
                 }).done(function () {
                     //fill each DDL with html from updated currentDDL
+                    refreshMainEmpDDLFromDOM();
                     //alert($("#currentDDL").children('select').children('option').length);
                     if ($("#currentDDL").children('select').children('option').length > 1) {
                         $(".empDDL").each(function (i) {
@@ -263,6 +264,7 @@
             $(document).ready(function () {
                 initTimers();
                 getEmpDDLUnassigned();
+                checkToDisableMainEmpDDL();
             });
 
 
@@ -273,6 +275,7 @@
                 var rowId = element.closest("tr").find(".invoiceid").html();
                 //console.log(rowId)
                 var selectedEmployee = element.closest("tr").find("select").val();
+                if (selectedEmployee == "") { return false; }
                 var currentRow = FooTable.getRow(element);
                 //console.log(selectedEmployee);
                 //add check for empty value, return false:
@@ -292,7 +295,7 @@
                         rowTimerCell.removeClass("setTimer").addClass("timerCell");
                         initTimers();
                         getEmpDDLUnassigned();
-                        refreshMainEmpDDLFromDOM();
+                        
                     },
                     error: function (result) {
                         element.closest("td").html("<span style=\"color:red;\">An error occurred. Please refresh the page.</span>");
@@ -326,7 +329,7 @@
                             $modal.modal('hide');
                             initTimers();
                             getEmpDDLUnassigned();
-                            refreshMainEmpDDLFromDOM();
+                            
                             refreshStats();
                         },
                         error: function (result) {
@@ -352,7 +355,7 @@
                             $modalCancel.modal('hide');
                             initTimers();
                             getEmpDDLUnassigned();
-                            refreshMainEmpDDLFromDOM();
+                            
                         },
                         error: function (result) {
                             $editorCancel.find(".modal-body").html("<div style=\"color:red;\">An error occurred, please refresh the page and try again.</div>");
@@ -375,22 +378,8 @@
             }
 
             $("#NewInvoice_PickLocationId").change(function () {
-
                 var value = $(this).val();
-                if ($(this).find("option:selected").text() == "Offsite") {
-                    //$("#NewInvoice_AssignedEmployeeId").find("option:selected").text("Offsite");
-                    //below might work if I need to select offsite as employee
-                    /*$("#NewInvoice_AssignedEmployeeId option").filter(function () {
-                        //may want to use $.trim in here
-                        return $(this).text() == "Offsite";
-                    }).prop('selected', true);*/
-                    $("#NewInvoice_AssignedEmployeeId").val("");
-                    $("#NewInvoice_AssignedEmployeeId").attr("disabled", "disabled"); 
-                }
-                else {
-                    $("#NewInvoice_AssignedEmployeeId").removeAttr('disabled');
-                    //refreshMainEmpDDLFromDOM();
-                }
+                checkToDisableMainEmpDDL();
             });
             // decided not to use this, could avoid ajax call since currentDDL is already loaded with all the latest values for select list
             /*function refreshMainEmpDDL() {
@@ -418,6 +407,15 @@
                     //alert($(this).val() + $(this).text());
                     mainDDL.append('<option value="' + $(this).val() + '">' + $(this).text() + '</option>');
                 });
+            }
+            function checkToDisableMainEmpDDL() {
+                if ($("#NewInvoice_PickLocationId").find("option:selected").text() == "Offsite") {
+                    $("#NewInvoice_AssignedEmployeeId").val("");
+                    $("#NewInvoice_AssignedEmployeeId").attr("disabled", "disabled");
+                }
+                else {
+                    $("#NewInvoice_AssignedEmployeeId").removeAttr('disabled');
+                }
             }
 
         </script>

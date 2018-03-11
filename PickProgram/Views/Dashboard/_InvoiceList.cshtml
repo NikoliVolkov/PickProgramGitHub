@@ -2,16 +2,16 @@
 <table class="table" data-filtering="true" data-sorting="true" data-paging="true" data-editing="true" data-editing-always-show="true" data-paging-widget="true" data-paging-widget-count-format="Total Pending Onsite: {TR}" data-filter-placeholder="Search Invoices">
     <thead>
         <tr>
-            <th data-visible="false" data-name="invoiceId">Invoice Id</th>
+            <th data-visible="false" data-name="invoiceId" data-filterable="false">Invoice Id</th>
             <th data-name="invoiceNo">Invoice #</th>
             <th data-type="number" data-name="numOfParts"># of Parts</th>
             <th class="hideLocation" data-name="pickLocation">Pick Location</th>
 
             <th class="hideAssigned" data-visible="true" data-name="assignedEmployee">Employee</th>
             <th>Created On</th>
-            <th data-type="date" data-name="assignedOn" data-visible="false">Assigned On</th>
-            <th data-sort-value="mySortValue" data-type="number" data-name="elapsedTime" data-sorted="true" data-direction="ASC">Elapsed Pull Time</th>
-            <th data-visible="false">Status</th>
+            <th data-type="date" data-name="assignedOn" data-visible="false" data-filterable="false">Assigned On</th>
+            <th data-sort-value="mySortValue" data-type="number" data-name="elapsedTime" data-filterable="false" data-sorted="true" data-direction="ASC">Elapsed Pull Time</th>
+            <th data-visible="false" data-filterable="false">Status</th>
 
         </tr>
     </thead>
