@@ -2,13 +2,13 @@
 
 @if (Model.TotalInvoices == 0)
 {
-    <h4>No stats available yet for today.</h4>
+    <h4>No stats available for today.</h4>
 }
 else
 {
 <div><strong>Total Invoices: </strong>@Model.TotalInvoices</div>
 <div><strong>Total Parts Pulled: </strong>@Model.TotalParts</div>
-<table class="table" data-sorting="true">
+<table class="table" id="statsTableUpdate" data-sorting="true" data-paging="true">
     <thead>
         <tr>
             <th>Employee</th>

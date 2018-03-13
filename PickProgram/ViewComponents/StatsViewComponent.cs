@@ -21,11 +21,11 @@ namespace PickProgram.ViewComponents
         {
             var stats = await GetStatsAsync();
             int totalParts = 0;
-
-            var totalInvoices = stats.Count();
+            int totalInvoices = 0;
             foreach (var p in stats)
             {
                 totalParts += p.TotalParts;
+                totalInvoices += p.TotalInvoices;
             }
 
             var svm = new StatsViewModel()

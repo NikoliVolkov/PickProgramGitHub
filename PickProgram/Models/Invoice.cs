@@ -12,7 +12,8 @@ namespace PickProgram.Models
         [Required]
         [DisplayName("Invoice Number")]
         public string InvoiceNumber { get; set; }
-        [Required]
+        [Required(ErrorMessage = "You must enter the number of parts on the invoice")]
+        [Range(1, 99, ErrorMessage = "Please enter number of parts to be pulled from 1-99.")]
         [DisplayName("Number of Parts")]
         public int NumberOfParts { get; set; }
         [Required]

@@ -243,7 +243,9 @@
             }
 
             function refreshStats() {
-
+                //explictly destroy footable before re-populating DOM and reinitializing
+                var ft = FooTable.get("#statsTableUpdate");
+                ft.destroy();
                 $("#statsTable").html("<div class=\"footable-loader\"><span class=\"fooicon fooicon-loader\"></span></div>");
                 $.ajax({
                     type: "GET",
@@ -251,7 +253,8 @@
                     //data: { id: clickedButton.val(), access_token: $("#access_token").val() },
                     success: function (result) {
                         //spinner.stop();
-                        $("#statsTable").html(result)
+                        $("#statsTable").html(result);
+                        $("#statsTableUpdate").footable();
                     },
                     error: function (result) {
                         //spinner.stop();
