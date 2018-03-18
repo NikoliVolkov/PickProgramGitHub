@@ -31,6 +31,7 @@ options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddTransient<IEmployeeRepository, EmployeeRepository>();
             services.AddTransient<IInvoiceRepository, InvoiceRepository>();
             services.AddTransient<IPickLocationRepository, PickLocationRepository>();
+            services.AddTransient<IInvoiceStatusRepository, InvoiceStatusRepository>();
             services.AddMvc();
         }
 

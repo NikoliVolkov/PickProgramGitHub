@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using PickProgram.Models;
 using PickProgram.ViewModels;
 //using Newtonsoft.Json;
@@ -15,12 +16,14 @@ namespace PickProgram.Controllers
     {
         private readonly IInvoiceRepository _invoiceRepository;
         private readonly IEmployeeRepository _employeeRepository;
-        private readonly IPickLocationRepository _picklocationRepository;
-        public DashboardController(IInvoiceRepository invoiceRepository, IEmployeeRepository employeeRepository, IPickLocationRepository pickLocationRepository)
+        private readonly IPickLocationRepository _pickLocationRepository;
+        private readonly IInvoiceStatusRepository _invoiceStatusRepository;
+        public DashboardController(IInvoiceRepository invoiceRepository, IEmployeeRepository employeeRepository, IPickLocationRepository pickLocationRepository, IInvoiceStatusRepository invoiceStatusRepository)
         {
             _invoiceRepository = invoiceRepository;
             _employeeRepository = employeeRepository;
-            _picklocationRepository = pickLocationRepository;
+            _pickLocationRepository = pickLocationRepository;
+            _invoiceStatusRepository = invoiceStatusRepository;
         }
         public IActionResult Main()
         {
@@ -42,7 +45,19 @@ namespace PickProgram.Controllers
             dvm.NewInvoice.StartDate = pacificNow;
             if (ModelState.IsValid)
             {
-                if(dvm.NewInvoice.AssignedEmployeeId != null)
+                dvm.NewInvoice.StatusId = GetPendingStatusId().Result.StatusId;
+                dvm.NewInvoice.NumberOfParts = dvm.NumberOfPartsInVM.Value;
+                dvm.NewInvoice.PickLocationId = dvm.PickLocationIdInVM.Value;
+
+                //check if offsite, assign to offsite employee
+                //should probably make this call async
+                if (dvm.NewInvoice.PickLocationId == GetOffsitePickLocationId())
+                {
+                    dvm.NewInvoice.AssignedEmployeeId = GetOffsiteEmployeeId();
+                }
+
+
+                if (dvm.NewInvoice.AssignedEmployeeId != null)
                 {
                     dvm.NewInvoice.AssignedDate = pacificNow;
                 }
@@ -58,6 +73,7 @@ namespace PickProgram.Controllers
             dvm.Employees = PopulateEmployeeSelectListOnsite();
             dvm.PickLocations = GetPickLocations();
             dvm.ListOfInvoicesOnsite = GetOnsiteInvoices();
+            dvm.ListOfInvoicesOffsite = GetOffsiteInvoices();
             return View(dvm);
         }
         /* No need to use this, can update using jquery
@@ -93,9 +109,22 @@ namespace PickProgram.Controllers
             return empSelectList.OrderBy(x => x.Text).ToList();
         }
 
+        public async Task<InvoiceStatus> GetPendingStatusId()
+        {
+            return await _invoiceStatusRepository.GetInvoiceStatuses().SingleAsync(p => p.Status == "Pending");
+        }
+        public int GetOffsitePickLocationId()
+        {
+            return _pickLocationRepository.GetPickLocations().Single(p => p.LocationDescription == "Offsite").LocationId;
+        }
+        public int GetOffsiteEmployeeId()
+        {
+            return _employeeRepository.GetEmployees().Single(p => p.Nickname == "Offsite").EmployeeId;
+        }
+
         public List<PickLocation> GetPickLocations()
         {
-            return _picklocationRepository.GetPickLocations().ToList();
+            return _pickLocationRepository.GetPickLocations().ToList();
         }
 
         public List<Invoice> GetOnsiteInvoices()
