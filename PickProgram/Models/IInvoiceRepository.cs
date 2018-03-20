@@ -9,6 +9,8 @@ namespace PickProgram.Models
     public interface IInvoiceRepository
     {
         IEnumerable<Invoice> GetInvoices();
+        IEnumerable<Invoice> GetPendingInvoices();
+        IEnumerable<Invoice> GetAllCompletedInvoices();
         IQueryable<Invoice> GetCompletedInvoicesForToday();
         Invoice GetInvoiceById(int invoiceId);
         IActionResult AddInvoice(Invoice newInvoice);

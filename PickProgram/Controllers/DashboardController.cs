@@ -129,12 +129,12 @@ namespace PickProgram.Controllers
 
         public List<Invoice> GetOnsiteInvoices()
         {
-            return _invoiceRepository.GetInvoices().Where(p => p.PickLocation.LocationDescription != "Offsite" && p.Status.Status != "Complete").ToList();
+            return _invoiceRepository.GetPendingInvoices().Where(p => p.PickLocation.LocationDescription != "Offsite").ToList();
             //return _invoiceRepository.GetInvoices().Where(p => p.PickLocation.LocationDescription != "Offsite").OrderByDescending(p => p.AssignedDate.HasValue).ThenBy(p => p.AssignedDate).ToList();
         }
         public List<Invoice> GetOffsiteInvoices()
         {
-            return _invoiceRepository.GetInvoices().Where(p => p.PickLocation.LocationDescription == "Offsite" && p.Status.Status != "Complete").ToList();
+            return _invoiceRepository.GetPendingInvoices().Where(p => p.PickLocation.LocationDescription == "Offsite").ToList();
         }
 
         public IActionResult GetStatsVC()

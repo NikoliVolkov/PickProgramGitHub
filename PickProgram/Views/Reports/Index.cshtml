@@ -1,0 +1,52 @@
+﻿@model ReportsViewModel
+@section Styles {
+    <link rel="stylesheet" href="~/css/bootstrap-datepicker3.css">
+}
+<h2>View Completed Tickets</h2>
+<p>Please select a date to view the report for that day:</p>
+<form class="form-horizontal" asp-controller="Archive" asp-action="" method="post">
+    @*if (ViewData.ModelState.Any(x => x.Value.Errors.Any()))
+        {
+            <div asp-validation-summary="All" class="alert alert-danger alert-dismissable"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a></div>
+        }*@
+    <div class="container">
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-3">
+                    <div class="input-group date datepicker">
+                        <input asp-for="ReportDate" class="form-control">
+                        <div class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-2">
+                    @*<input asp-for="NewInvoice.StatusId" type="hidden" value="1" />*@
+                    <input type="submit" class="btn btn-primary" value="View Report" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--<div class="form-group">
+
+    </div>-->
+
+</form>
+
+
+
+@section Scripts {
+    <script src="~/js/bootstrap-datepicker.js"></script>
+    <script>
+        $('.datepicker').datepicker({
+            autoclose: true,
+            todayHighlight: true
+            });
+    </script>
+}

@@ -1,0 +1,38 @@
+﻿@model List<Invoice>
+<table class="table" data-filtering="true" data-sorting="true" data-paging="true" data-paging-size="30" data-paging-widget="true" data-paging-widget-count-format="Total Completed Invoices: {TR}" data-filter-placeholder="Search Invoices">
+    <thead>
+        <tr>
+            <th data-visible="false" data-name="invoiceId" data-filterable="false">Invoice Id</th>
+            <th data-name="invoiceNo">Invoice #</th>
+            <th data-type="number" data-name="numOfParts"># of Parts</th>
+            <th data-name="pickLocation">Pick Location</th>
+            <th data-visible="true" data-name="assignedEmployee">Employee</th>
+            <th>Created On</th>
+            @*<th data-type="date" data-name="assignedOn" data-visible="false" data-filterable="false">Assigned On</th>
+        <th data-sort-value="mySortValue" data-type="number" data-name="elapsedTime" data-filterable="false" data-sorted="true" data-direction="ASC">Elapsed Pull Time</th>*@
+            <th>Finished On</th>
+            <th>Total Time Taken</th>
+            <th data-filterable="false">Status</th>
+
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var x in Model)
+        {
+            <tr>
+                <td class="invoiceid">@x.InvoiceId</td>
+                <td>@x.InvoiceNumber</td>
+                <td>@x.NumberOfParts</td>
+                <td><span style="font-weight:bold; text-decoration:underline;">@x.PickLocation.LocationDescription.Substring(0, 1)</span>@x.PickLocation.LocationDescription.Substring(1, x.PickLocation.LocationDescription.Length - 1) </td>
+                <td>@x.AssignedEmployee.Nickname</td>
+                <td data-sort-value="@x.StartDateInTicks">@x.StartDate</td>
+                <td>@x.FinishDate</td>
+                <td>Too Long</td>
+                <td>@x.Status.Status</td>
+
+            </tr>
+
+        }
+    </tbody>
+</table>

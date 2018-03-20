@@ -31,6 +31,30 @@ namespace PickProgram.Models
             }
             return invoiceData;
         }
+        public IEnumerable<Invoice> GetPendingInvoices()
+        {
+            var invoiceData = _dbConnection.Invoice.Include(p => p.Status).Include(p => p.AssignedEmployee).Include(p => p.PickLocation).Where(p => p.Status.Status != "Complete");
+            foreach (var inv in invoiceData)
+            {
+                string tickValue = inv.StartDate.Ticks.ToString();
+                inv.StartDateInTicks = tickValue;
+            }
+            return invoiceData;
+        }
+        /*public IQueryable<Invoice> GetCompletedInvoicesForDate(DateTime reportDate)
+        {
+            var completedInvoicesForDate = _dbConnection.Invoice.Include(p => p.Status).Include(p => p.AssignedEmployee).Where(p => p.FinishDate.Value.Date == reportDate.Date && p.Status.Status == "Complete");
+            //var today = DateTime.Today;
+            //var q = db.Games.Where(t => DbFunctions.TruncateTime(t.StartDate) >= today);
+
+            return completedInvoicesForDate.AsQueryable();
+        }*/
+        public IEnumerable<Invoice> GetAllCompletedInvoices()
+        {
+            var allCompletedInvoices = _dbConnection.Invoice.Include(p => p.Status).Include(p => p.AssignedEmployee).Include(p => p.PickLocation).Where(p => p.Status.Status == "Complete");
+
+            return allCompletedInvoices;
+        }
 
         public IQueryable<Invoice> GetCompletedInvoicesForToday()
         {
