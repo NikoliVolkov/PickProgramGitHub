@@ -37,7 +37,7 @@
                 
                 @*<td>@if (x.AssignedEmployeeId == null){<button id="@("assign" + x.InvoiceId)" onclick="getEmpDDL($(this))" type="button" class="btn btn-default btn-sm">Assign Employee <span class="glyphicon glyphicon-user" aria-hidden="true"></span></button>}else{<text>@x.AssignedEmployee.FirstName @x.AssignedEmployee.LastName</text>}</td>*@
                 <td>@if (x.AssignedEmployeeId == null){<span class="empDDL input-group input-group-sm">Loading JavaScript...</span>}else{<text>@x.AssignedEmployee.Nickname</text>}</td>
-                <td>@x.StartDate</td>
+                <td data-sort-value="@x.StartDateInTicks">@x.StartDate</td>
                 <td>@x.AssignedDate</td>
                 @if(x.AssignedDate.HasValue){
                     dotNetTicks = new DateTime(x.AssignedDate.Value.Year, x.AssignedDate.Value.Month, x.AssignedDate.Value.Day, x.AssignedDate.Value.Hour, x.AssignedDate.Value.Minute, x.AssignedDate.Value.Second);

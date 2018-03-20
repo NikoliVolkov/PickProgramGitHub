@@ -24,6 +24,11 @@ namespace PickProgram.Models
         public IEnumerable<Invoice> GetInvoices()
         {
             var invoiceData = _dbConnection.Invoice.Include(p => p.Status).Include(p => p.AssignedEmployee).Include(p => p.PickLocation);
+            foreach(var inv in invoiceData)
+            {
+                string tickValue = inv.StartDate.Ticks.ToString();
+                inv.StartDateInTicks = tickValue;
+            }
             return invoiceData;
         }
 
