@@ -5,7 +5,7 @@
     <p class="alert alert-success alert-dismissable"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a><strong>@TempData["Message"]</strong></p>
 }
 
-<form class="form-horizontal" asp-controller="Dashboard" asp-action="" method="post">
+<form class="form-horizontal" asp-controller="Dashboard" asp-action="Main" method="post">
     @if (ViewData.ModelState.Any(x => x.Value.Errors.Any()))
     {
         <div asp-validation-summary="All" class="alert alert-danger alert-dismissable"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a></div>

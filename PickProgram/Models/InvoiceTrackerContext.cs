@@ -28,6 +28,7 @@ namespace PickProgram.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Employee>(entity =>
             {
                 entity.Property(e => e.FirstName)

@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PickProgram.Models;
 using PickProgram.ViewModels;
 
 namespace PickProgram.Controllers
 {
+    [Authorize]
     public class ArchiveController : Controller
     {
         private readonly IInvoiceRepository _invoiceRepository;

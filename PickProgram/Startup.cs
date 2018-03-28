@@ -30,6 +30,22 @@ namespace PickProgram
 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<InvoiceTrackerContext>();
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Password settings
+                options.Password.RequireDigit = true;
+                options.Password.RequiredLength = 4;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequiredUniqueChars = 0;
+
+                // Lockout settings
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+                options.Lockout.MaxFailedAccessAttempts = 10;
+                options.Lockout.AllowedForNewUsers = true;
+
+            });
             services.AddTransient<IEmployeeRepository, EmployeeRepository>();
             services.AddTransient<IInvoiceRepository, InvoiceRepository>();
             services.AddTransient<IPickLocationRepository, PickLocationRepository>();
@@ -57,7 +73,10 @@ options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Dashboard}/{action=Main}/{id?}/{id2?}");
+                    template: "{controller=Account}/{action=Login}/{id?}/{id2?}");
+                /*routes.MapRoute(
+                    name: "addUser",
+                    template: "{controller=Account}/{action=AddUser}/{username}/{password}");*/
             });
         }
     }

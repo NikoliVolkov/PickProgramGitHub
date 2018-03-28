@@ -98,3 +98,17 @@
 #statsTable .footable-loader{
     height: 125px;
 }
+
+.form-signin {
+    max-width: 330px;
+    margin: 0 auto;
+    border-color: black;
+    border-width: 1px;
+    border-radius: 4px 4px 0 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.input-group-addon > label {
+    display:inline;
+}
