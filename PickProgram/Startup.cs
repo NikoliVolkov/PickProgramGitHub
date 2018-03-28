@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using PickProgram.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace PickProgram
 {
@@ -28,6 +29,7 @@ namespace PickProgram
             services.AddDbContext<InvoiceTrackerContext>(options =>
 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<InvoiceTrackerContext>();
             services.AddTransient<IEmployeeRepository, EmployeeRepository>();
             services.AddTransient<IInvoiceRepository, InvoiceRepository>();
             services.AddTransient<IPickLocationRepository, PickLocationRepository>();
@@ -49,6 +51,7 @@ options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             }
 
             app.UseStaticFiles();
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {

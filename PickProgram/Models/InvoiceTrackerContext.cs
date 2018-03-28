@@ -1,10 +1,12 @@
 ﻿using System;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace PickProgram.Models
 {
-    public partial class InvoiceTrackerContext : DbContext
+    public partial class InvoiceTrackerContext : IdentityDbContext<IdentityUser>
     {
         public virtual DbSet<Employee> Employee { get; set; }
         public virtual DbSet<Invoice> Invoice { get; set; }
