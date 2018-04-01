@@ -31,13 +31,31 @@ namespace PickProgram.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel lvm)
         {
-            var foundUser = await _userManager.FindByNameAsync(lvm.Username);
-            if (foundUser != null)
+            if (ModelState.IsValid)
             {
-                await _signInManager.PasswordSignInAsync(foundUser, lvm.Password, false, false);
-                return RedirectToAction("Main", "Dashboard");
+                var foundUser = await _userManager.FindByNameAsync(lvm.Username);
+                if (foundUser != null)
+                {
+                    var result = await _signInManager.PasswordSignInAsync(foundUser, lvm.Password, false, false);
+
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("Main", "Dashboard");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("", "The password entered does not match our records. Please try again.");
+                        return View(lvm);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Username was not found. Please try again.");
+                    return View(lvm);
+                }
             }
-            return View();
+            //necesarry to pass viewmodel back in?
+            return View(lvm);
         }
         public async Task<IActionResult> Logout()
         {

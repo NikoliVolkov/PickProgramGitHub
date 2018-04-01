@@ -10,9 +10,9 @@ namespace PickProgram.ViewModels
 {
     public class LoginViewModel
     {
-        [Required]
+        [Required(ErrorMessage = "Please enter a non-blank username.")]
         public string Username { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Please enter your password.")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
     }

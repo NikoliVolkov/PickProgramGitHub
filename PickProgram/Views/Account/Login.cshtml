@@ -7,6 +7,10 @@
 
         <form class="form-signin" asp-controller="Account" asp-action="Login" method="post">
             <h3 class="text-center">Please sign in.</h3>
+             @if (ViewData.ModelState.Any(x => x.Value.Errors.Any()))
+             {
+            <div asp-validation-summary="All" class="alert alert-danger alert-dismissable"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a></div>
+             }
             <div class="form-group">
                 <div class="input-group">
                     <span class="input-group-addon"><label asp-for="@Model.Username"><span class="glyphicon glyphicon-user"></span></label></span>
