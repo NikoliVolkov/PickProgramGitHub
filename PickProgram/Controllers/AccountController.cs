@@ -17,15 +17,19 @@ namespace PickProgram.Controllers
             _userManager = userManager;
             _signInManager = signInManager;
         }
-        public async Task<IActionResult> AddUser(string id, string id2)
+        /*public async Task<IActionResult> AddUser(string id, string id2)
         {
             var newUser = new IdentityUser() { UserName = id };
             IdentityResult result = await _userManager.CreateAsync(newUser, id2);
 
             return RedirectToAction("Main", "Dashboard");
-        }
+        }*/
         public IActionResult Login()
         {
+            if (_signInManager.IsSignedIn(User))
+            {
+                return RedirectToAction("Main", "Dashboard");
+            }
             return View();
         }
         [HttpPost]

@@ -41,9 +41,22 @@
     /*min-height:100px;*/
     background-color: #28323c;
 }
+
+.navbar-inverse .navbar-nav > li > a {
+        color: white;
+}
+
+.navbar-inverse .navbar-nav > li > a:hover {
+        color: #9d9d9d;
+}
+
 @media (min-width: 768px) {
     .form-horizontal .control-label {
         text-align: left;
+    }
+    .navbar-nav {
+        float: left;
+        margin: 13px 13px 0 13px;
     }
 }
 /* Footable css for count widget */

@@ -85,8 +85,10 @@ namespace PickProgram.Models
 
         public IQueryable<Invoice> GetCompletedInvoicesForToday()
         {
-            var today = DateTime.Today;
-            var completedInvoicesForToday = _dbConnection.Invoice.Include(p => p.Status).Include(p => p.AssignedEmployee).Where(p => p.FinishDate.Value.Date == today && p.Status.Status == "Complete");
+            var zone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+            var utcNow = DateTime.UtcNow;
+            var pacificNow = TimeZoneInfo.ConvertTimeFromUtc(utcNow, zone).Date;
+            var completedInvoicesForToday = _dbConnection.Invoice.Include(p => p.Status).Include(p => p.AssignedEmployee).Where(p => p.FinishDate.Value.Date == pacificNow && p.Status.Status == "Complete");
             //var today = DateTime.Today;
             //var q = db.Games.Where(t => DbFunctions.TruncateTime(t.StartDate) >= today);
 
