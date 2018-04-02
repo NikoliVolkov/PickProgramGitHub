@@ -10,7 +10,7 @@ namespace PickProgram.Models
     {
         IEnumerable<Invoice> GetInvoices();
         IEnumerable<Invoice> GetPendingInvoices();
-        IEnumerable<Invoice> GetAllCompletedInvoices();
+        IEnumerable<Invoice> GetAllCompletedInvoicesLast30();
         IQueryable<Invoice> GetCompletedInvoicesForToday();
         Invoice GetInvoiceById(int invoiceId);
         IActionResult AddInvoice(Invoice newInvoice);

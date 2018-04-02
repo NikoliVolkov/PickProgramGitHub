@@ -49,10 +49,37 @@ namespace PickProgram.Models
 
             return completedInvoicesForDate.AsQueryable();
         }*/
-        public IEnumerable<Invoice> GetAllCompletedInvoices()
+        public IEnumerable<Invoice> GetAllCompletedInvoicesLast30()
         {
-            var allCompletedInvoices = _dbConnection.Invoice.Include(p => p.Status).Include(p => p.AssignedEmployee).Include(p => p.PickLocation).Where(p => p.Status.Status == "Complete");
+            //get 30 days before today
+            var zone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
+            var utcNow = DateTime.UtcNow;
+            var pacificNowMinus30 = (TimeZoneInfo.ConvertTimeFromUtc(utcNow, zone).Date.AddDays(-30));
 
+            var allCompletedInvoices = _dbConnection.Invoice.Include(p => p.Status).Include(p => p.AssignedEmployee).Include(p => p.PickLocation).Where(p => p.Status.Status == "Complete" && p.FinishDate.Value.Date > pacificNowMinus30);
+            foreach (var inv in allCompletedInvoices)
+            {
+                //get total time taken column for table
+                string startTickValue = inv.StartDate.Ticks.ToString();
+                inv.StartDateInTicks = startTickValue;
+
+                string assignedTickValue = inv.AssignedDate.Value.Ticks.ToString();
+                inv.AssignedDateInTicks = assignedTickValue;
+
+                string endTickValue = inv.FinishDate.Value.Ticks.ToString();
+                inv.FinishDateInTicks = endTickValue;
+
+                //remove fractional seconds for display
+                var assignedSansMilli = new DateTime(inv.AssignedDate.Value.Year, inv.AssignedDate.Value.Month, inv.AssignedDate.Value.Day, inv.AssignedDate.Value.Hour, inv.AssignedDate.Value.Minute, inv.AssignedDate.Value.Second);
+                var finishSansMilli = new DateTime(inv.FinishDate.Value.Year, inv.FinishDate.Value.Month, inv.FinishDate.Value.Day, inv.FinishDate.Value.Hour, inv.FinishDate.Value.Minute, inv.FinishDate.Value.Second);
+                //get time difference between when ticket assigned and closed
+                var timeSpan = (finishSansMilli - assignedSansMilli);
+                //double roundedSeconds = Math.Ceiling(timeSpan.Seconds + timeSpan.Milliseconds * 0.001);
+                double hoursSegment = Math.Floor(timeSpan.TotalHours);
+                string totalPullTime = String.Format("{0}h {1}m {2}s", hoursSegment, timeSpan.Minutes, timeSpan.Seconds);
+                inv.TotalPullTime = totalPullTime;
+                inv.TotalPullTimeInTicks = timeSpan.Ticks.ToString();
+            }
             return allCompletedInvoices;
         }
 

@@ -33,8 +33,8 @@
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Dashboard" asp-action="Main"><span class="glyphicon glyphicon-home"></span> Dashboard</a></li>
                     <li><a asp-area="" asp-controller="Archive" asp-action="Index"><span class="glyphicon glyphicon-briefcase"></span> Archive</a></li>
-                    <li><a asp-area="" asp-controller="Reports" asp-action="Index"><span class="glyphicon glyphicon-dashboard"></span> Efficiency Reports</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="About"><span class="glyphicon glyphicon-user"></span> Manage Personnel</a></li>
+                    @*<li><a asp-area="" asp-controller="Reports" asp-action="Index"><span class="glyphicon glyphicon-dashboard"></span> Efficiency Reports</a></li>
+                    <li><a asp-area="" asp-controller="Home" asp-action="About"><span class="glyphicon glyphicon-user"></span> Manage Personnel</a></li>*@
                     <li><a asp-area="" asp-controller="Account" asp-action="Logout"><span class="glyphicon glyphicon-new-window"></span> Log Off</a></li>
                 </ul>
                 }
@@ -45,7 +45,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p class="text-center"><img src="~/images/buffalosm.png" /><br /><strong>&copy; 2018 BuffaloKreative Software Dev.</strong><br /><span class="small">Version 1.1&alpha;</span></p>
+            <p class="text-center"><img src="~/images/buffalosm.png" /><br /><strong>&copy; 2018 BuffaloKreative</strong><br /><span class="small">Version 1.0&beta;</span></p>
         </footer>
     </div>
 

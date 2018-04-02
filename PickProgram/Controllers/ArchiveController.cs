@@ -20,7 +20,7 @@ namespace PickProgram.Controllers
         }
         public IActionResult Index()
         {
-            var completedInvoices = _invoiceRepository.GetAllCompletedInvoices().OrderBy(p => p.AssignedEmployee.Nickname).ToList();
+            var completedInvoices = _invoiceRepository.GetAllCompletedInvoicesLast30().ToList();
             //var avm = new ArchiveViewModel(){ };
             return View(completedInvoices);
         }

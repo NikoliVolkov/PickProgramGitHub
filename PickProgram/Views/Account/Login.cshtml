@@ -6,7 +6,7 @@
     <div class="container">
 
         <form class="form-signin" asp-controller="Account" asp-action="Login" method="post">
-            <h3 class="text-center">Please sign in.</h3>
+            <h3 class="text-center">Please enter your credentials.</h3>
              @if (ViewData.ModelState.Any(x => x.Value.Errors.Any()))
              {
             <div asp-validation-summary="All" class="alert alert-danger alert-dismissable"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a></div>
