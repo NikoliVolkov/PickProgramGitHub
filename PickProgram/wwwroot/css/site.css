@@ -38,17 +38,19 @@
     }
 }
 .navbar {
-    /*min-height:100px;*/
-    background-color: #28323c;
+    /*min-height:100px;
+    background-color: #28323c;*/
+    background-image: url("/images/texture.jpg");
+    background-repeat:repeat;
 }
 
 .navbar-inverse .navbar-nav > li > a {
         color: white;
 }
 
-.navbar-inverse .navbar-nav > li > a:hover {
-        color: #9d9d9d;
-}
+    .navbar-inverse .navbar-nav > li > a:hover {
+        color: lightslategray;
+    }
 
 @media (min-width: 768px) {
     .form-horizontal .control-label {
