@@ -1,46 +1,53 @@
 ﻿@model EmployeeManageViewModel
-<h2>Manage Personnel</h2>
-<div class="container-fluid">
-    <h3>Active Employees</h3>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Nickname</th>
-                <th>Edit/Delete</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (Employee e in Model.ActiveEmployees)
+<h2>Manage Personnel <small><em>Edit Employee Info or Remove Employees from the Puller List</em></small></h2>
+<div class="container">
+    <div class="row">
+        <div class="col-md-7">
+            <h3>Active Employees</h3>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Nickname</th>
+                        <th>Edit/Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td colspan="3"><a asp-controller="Manage" asp-action="AddEmployee" class="no-underline"><span class="glyphicon glyphicon-plus"></span> Add Employee</a></td>
+                    </tr>
+                    @foreach (Employee e in Model.ActiveEmployees)
             {
-            <tr>
-                <td>@e.FirstName @e.LastName</td>
-                <td>@e.Nickname</td>
-                <td>Gogglins deep</td>
-            </tr>
-            }
-        </tbody>
-    </table>
-    <h3>Inactive Employees</h3>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Nickname</th>
-                <th>Deactivated On</th>
-                <th>Reinstate</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (Employee e in Model.InactiveEmployees)
+                <tr>
+                    <td width="50%">@e.FirstName @e.LastName</td>
+                    <td width="40%">@e.Nickname</td>
+                    <td><div class="btn-group btn-group-xs"><a asp-controller="Manage" asp-action="EditEmployee" asp-route-id="@e.EmployeeId" class="btn btn-default"><span class="glyphicon glyphicon-pencil"></span></a> <a asp-controller="Manage" asp-action="DeactivateEmployee" asp-route-id="@e.EmployeeId" class="btn btn-default"><span class="glyphicon glyphicon-trash"></span></a></div></td>
+                </tr>
+    }
+                </tbody>
+            </table>
+            <h3>Inactive Employees</h3>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Nickname</th>
+                        <th>Deactivated On</th>
+                        <th>Reinstate</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Employee e in Model.InactiveEmployees)
             {
-            <tr>
-                <td>@e.FirstName @e.LastName</td>
-                <td>@e.Nickname</td>
-                <td>@e.DeactivateDate</td>
-                <td>@e.EmployeeId</td>
-            </tr>
-            }
-        </tbody>
-    </table>
+                <tr>
+                    <td>@e.FirstName @e.LastName</td>
+                    <td>@e.Nickname</td>
+                    <td>@e.DeactivateDate</td>
+                    <td><a asp-controller="Manage" asp-action="ReinstateEmployee" asp-route-id="@e.EmployeeId" class="btn btn-default btn-xs"><span class="glyphicon glyphicon-check"></span></a></td>
+                </tr>
+    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>

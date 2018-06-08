@@ -20,8 +20,8 @@ namespace PickProgram.Controllers
         }
         public IActionResult Personnel()
         {
-            var activeEmployees = _employeeRepository.GetEmployees().Where(e => e.DeactivateDate == null && e.Nickname != "Offsite").ToList();
-            var inactiveEmployees = _employeeRepository.GetEmployees().Where(e => e.DeactivateDate.HasValue && e.Nickname != "Offsite").ToList();
+            var activeEmployees = _employeeRepository.GetEmployees().Where(e => e.DeactivateDate == null && e.Nickname != "Offsite").OrderBy(e => e.FirstName).ThenBy(e => e.LastName).ToList();
+            var inactiveEmployees = _employeeRepository.GetEmployees().Where(e => e.DeactivateDate.HasValue && e.Nickname != "Offsite").OrderByDescending(e => e.DeactivateDate).ToList();
             var emvm = new EmployeeManageViewModel
             {
                 ActiveEmployees = activeEmployees,

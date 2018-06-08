@@ -127,3 +127,7 @@
 .input-group-addon > label {
     display:inline;
 }
+
+.no-underline:hover{
+    text-decoration:none;
+}
