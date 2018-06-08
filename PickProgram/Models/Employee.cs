@@ -14,6 +14,7 @@ namespace PickProgram.Models
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Nickname { get; set; }
+        public DateTime? DeactivateDate { get; set; }
 
         public ICollection<Invoice> Invoice { get; set; }
     }

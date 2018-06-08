@@ -48,6 +48,12 @@ namespace PickProgram.Models
 
             modelBuilder.Entity<Invoice>(entity =>
             {
+                entity.HasIndex(e => e.AssignedEmployeeId);
+
+                entity.HasIndex(e => e.PickLocationId);
+
+                entity.HasIndex(e => e.StatusId);
+
                 entity.Property(e => e.InvoiceNumber)
                     .IsRequired()
                     .HasMaxLength(50)

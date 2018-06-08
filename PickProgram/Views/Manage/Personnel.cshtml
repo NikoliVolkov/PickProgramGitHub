@@ -1,4 +1,4 @@
-﻿@model List<Invoice>
+﻿@model EmployeeManageViewModel
 <h2>Manage Personnel</h2>
 <div class="container-fluid">
     <h3>Active Employees</h3>
@@ -11,14 +11,17 @@
             </tr>
         </thead>
         <tbody>
+            @foreach (Employee e in Model.ActiveEmployees)
+            {
             <tr>
-                <td>Gogglins deep</td>
-                <td>G-deep</td>
+                <td>@e.FirstName @e.LastName</td>
+                <td>@e.Nickname</td>
                 <td>Gogglins deep</td>
             </tr>
+            }
         </tbody>
     </table>
-    <h3>Deactivated Employees</h3>
+    <h3>Inactive Employees</h3>
     <table class="table">
         <thead>
             <tr>
@@ -29,12 +32,15 @@
             </tr>
         </thead>
         <tbody>
+            @foreach (Employee e in Model.InactiveEmployees)
+            {
             <tr>
-                <td>Gogglins deep</td>
-                <td>G-deep</td>
-                <td>Gogglins deep</td>
-                <td>Gogglins deep</td>
+                <td>@e.FirstName @e.LastName</td>
+                <td>@e.Nickname</td>
+                <td>@e.DeactivateDate</td>
+                <td>@e.EmployeeId</td>
             </tr>
+            }
         </tbody>
     </table>
 </div>

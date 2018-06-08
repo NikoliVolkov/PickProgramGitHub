@@ -20,9 +20,14 @@ namespace PickProgram.Controllers
         }
         public IActionResult Personnel()
         {
-            //var completedInvoices = _invoiceRepository.GetAllCompletedInvoicesLast30().ToList();
-            //var avm = new ArchiveViewModel(){ };
-            return View();
+            var activeEmployees = _employeeRepository.GetEmployees().Where(e => e.DeactivateDate == null && e.Nickname != "Offsite").ToList();
+            var inactiveEmployees = _employeeRepository.GetEmployees().Where(e => e.DeactivateDate.HasValue && e.Nickname != "Offsite").ToList();
+            var emvm = new EmployeeManageViewModel
+            {
+                ActiveEmployees = activeEmployees,
+                InactiveEmployees = inactiveEmployees
+            };
+            return View(emvm);
         }
     }
 }
