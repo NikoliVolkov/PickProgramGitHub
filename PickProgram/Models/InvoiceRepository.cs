@@ -83,6 +83,37 @@ namespace PickProgram.Models
             return allCompletedInvoices;
         }
 
+        public IEnumerable<Invoice> GetAllCompletedInvoicesForRange(DateTime startDate, DateTime endDate)
+        {
+            //get all invoices within the selected date range
+
+            var allCompletedInvoicesForRange = _dbConnection.Invoice.Include(p => p.Status).Include(p => p.AssignedEmployee).Include(p => p.PickLocation).Where(p => p.Status.Status == "Complete" && p.FinishDate.Value.Date >= startDate && p.FinishDate.Value.Date <= endDate);
+            foreach (var inv in allCompletedInvoicesForRange)
+            {
+                //get total time taken column for table
+                string startTickValue = inv.StartDate.Ticks.ToString();
+                inv.StartDateInTicks = startTickValue;
+
+                string assignedTickValue = inv.AssignedDate.Value.Ticks.ToString();
+                inv.AssignedDateInTicks = assignedTickValue;
+
+                string endTickValue = inv.FinishDate.Value.Ticks.ToString();
+                inv.FinishDateInTicks = endTickValue;
+
+                //remove fractional seconds for display
+                var assignedSansMilli = new DateTime(inv.AssignedDate.Value.Year, inv.AssignedDate.Value.Month, inv.AssignedDate.Value.Day, inv.AssignedDate.Value.Hour, inv.AssignedDate.Value.Minute, inv.AssignedDate.Value.Second);
+                var finishSansMilli = new DateTime(inv.FinishDate.Value.Year, inv.FinishDate.Value.Month, inv.FinishDate.Value.Day, inv.FinishDate.Value.Hour, inv.FinishDate.Value.Minute, inv.FinishDate.Value.Second);
+                //get time difference between when ticket assigned and closed
+                var timeSpan = (finishSansMilli - assignedSansMilli);
+
+                double hoursSegment = Math.Floor(timeSpan.TotalHours);
+                string totalPullTime = String.Format("{0}h {1}m {2}s", hoursSegment, timeSpan.Minutes, timeSpan.Seconds);
+                inv.TotalPullTime = totalPullTime;
+                inv.TotalPullTimeInTicks = timeSpan.Ticks.ToString();
+            }
+            return allCompletedInvoicesForRange;
+        }
+
         public IQueryable<Invoice> GetCompletedInvoicesForToday()
         {
             var zone = TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");

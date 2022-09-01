@@ -1,0 +1,54 @@
+﻿@model IEnumerable<Invoice>
+                @{      var totalTicksToSpan = Model.Sum(x => Convert.ToInt64(x.TotalPullTimeInTicks));
+                        var totalTicksToSeconds = TimeSpan.FromTicks(totalTicksToSpan).TotalSeconds;
+                        var thh = Math.Floor(Convert.ToDouble(totalTicksToSeconds) / 3600);
+                        var tmm = Math.Floor((Convert.ToDouble(totalTicksToSeconds) % 3600) / 60);
+                        var tss = totalTicksToSeconds % 60;
+                        string totalSummedPullTime = String.Format("{0}h {1}m {2}s", thh, tmm, tss);
+                 }
+@if (Model.Count() > 0) { 
+        <div class="well well-sm">
+    <h3 style="margin-top:0px;"><span class="glyphicon glyphicon-paste"></span> Report Summary:</h3>
+    <b><span class="glyphicon glyphicon-triangle-right"></span>Total Employees:</b> @Model.GroupBy(x => x.AssignedEmployeeId).Count() <br />
+    <b><span class="glyphicon glyphicon-triangle-right"></span>Total Invoices:</b> @Model.Count() <br />
+    <b><span class="glyphicon glyphicon-triangle-right"></span>Total Parts:</b> @Model.Sum(x => x.NumberOfParts)<br />
+    <b><span class="glyphicon glyphicon-triangle-right"></span>Total Pull Time:</b> @totalSummedPullTime
+        </div>
+    }
+    <table class="table" data-filtering="true" data-sorting="true" data-paging="true" data-paging-size="20" data-paging-widget="false" data-filter-placeholder="Filter Report">
+        <thead>
+            <tr>
+                <th data-name="employee">Employee</th>
+                <th data-type="number" data-name="numOfParts">Total # of Parts</th>
+                <th data-type="number" data-name="numOfInvoices">Total Invoices</th>
+                <th data-filterable="false" data-name="timePulling">Total Time Pulling</th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+
+
+            @{var groupedTotals = Model.GroupBy(x => x.AssignedEmployeeId);}
+            @foreach (var emp in groupedTotals)
+            {
+
+                var ticksToSpan = emp.Sum(x => Convert.ToInt64(x.TotalPullTimeInTicks));
+                var ticksToSeconds = TimeSpan.FromTicks(ticksToSpan).TotalSeconds;
+                var hh = Math.Floor(Convert.ToDouble(ticksToSeconds) / 3600);
+                var mm = Math.Floor((Convert.ToDouble(ticksToSeconds) % 3600) / 60);
+                var ss = ticksToSeconds % 60;
+                string summedPullTime = String.Format("{0}h {1}m {2}s", hh, mm, ss);
+                <tr>
+
+                    <td>@emp.Select(x => x.AssignedEmployee.Nickname).First()</td>
+                    <td>@emp.Sum(x => x.NumberOfParts)</td>
+                    <td>@emp.Count()</td>
+                    <td data-sort-value="@emp.Sum(x => Convert.ToInt64(x.TotalPullTimeInTicks))">@summedPullTime</td>
+
+                </tr>
+            }
+
+
+        </tbody>
+    </table>

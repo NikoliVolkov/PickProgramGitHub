@@ -1,0 +1,87 @@
+﻿@model ReportsViewModel
+@section Styles {
+    <link rel="stylesheet" href="~/css/bootstrap-datepicker3.css">
+}
+<h2>View a Summary Report</h2>
+<p>Please select the date range for which you'd like to view a report:<div class="alert alert-info" role="alert"><b>Hint:</b> To view a single day's data, select the start and end date as the same date.</div></p>
+<form class="form-horizontal" asp-controller="Reports" asp-action="SummaryReport" method="post">
+    @if (ViewData.ModelState.Any(x => x.Value.Errors.Any()))
+        {
+            <div asp-validation-summary="All" class="alert alert-danger alert-dismissable"><a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a></div>
+        }
+    <div class="container">
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-3">
+                    <div class="input-group date datepicker">
+                        <input asp-for="StartDate" class="form-control" placeholder="Start Date">
+                        <div class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="input-group date datepicker">
+                        <input asp-for="EndDate" class="form-control" placeholder="End Date">
+                        <div class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group">
+                <div class="col-md-2">
+                    @*<input asp-for="NewInvoice.StatusId" type="hidden" value="1" />*@
+                    <input type="submit" class="btn btn-primary" value="View Report" />
+                    <input type="reset" class="btn btn-primary" value="Reset" onclick="resetValidation()" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+
+<div class="container-fluid">
+    <div id="reportTable">
+        @Html.Partial("_SummaryInvoiceList", Model.SummaryListOfInvoices)
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <script src="~/js/bootstrap-datepicker.js"></script>
+    <script>
+        $('.datepicker').datepicker({
+            autoclose: true,
+            todayHighlight: true
+        });
+        $('.table').footable();
+    </script>
+    <script>
+        function resetValidation() {
+                //get datepicker fields
+                var dates = $("input[id$='StartDate'], input[id$='EndDate']");
+                dates.attr('value', '');
+                //close validation section
+                $(".close").click();
+                //refresh reports partial view
+                $.ajax({
+                    type: "GET",
+                    url: "/Reports/GetEmptyReport/",
+                    success: function (result) {
+                        $("#reportTable").html(result)
+                    },
+                    error: function (result) {
+                        $("#reportTable").html("<span style=\"color:red;\">An error occurred. Please refresh the page.</span>");
+                    }
+                }).done(function () {
+                    $('.table').footable();
+                });
+
+        }      
+    </script>
+}

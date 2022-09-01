@@ -11,6 +11,7 @@ namespace PickProgram.Models
         IEnumerable<Invoice> GetInvoices();
         IEnumerable<Invoice> GetPendingInvoices();
         IEnumerable<Invoice> GetAllCompletedInvoicesLast30();
+        IEnumerable<Invoice> GetAllCompletedInvoicesForRange(DateTime startDate, DateTime endDate);
         IQueryable<Invoice> GetCompletedInvoicesForToday();
         Invoice GetInvoiceById(int invoiceId);
         IActionResult AddInvoice(Invoice newInvoice);

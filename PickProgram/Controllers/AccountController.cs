@@ -23,6 +23,12 @@ namespace PickProgram.Controllers
             IdentityResult result = await _userManager.CreateAsync(newUser, id2);
 
             return RedirectToAction("Main", "Dashboard");
+        }
+        public async Task<IActionResult> ChangePassword(string id, string id2)
+        {
+            var selectedUser = await _userManager.FindByNameAsync(id);
+            var result = await _userManager.ChangePasswordAsync(selectedUser, "2011", "tourdekyle2018");
+            return RedirectToAction("Main", "Dashboard");
         }*/
         public IActionResult Login()
         {

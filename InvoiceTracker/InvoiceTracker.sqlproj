@@ -70,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="AzurePublish.publish.xml" />
+    <None Include="AzurePublishDev.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment1.sql" />
